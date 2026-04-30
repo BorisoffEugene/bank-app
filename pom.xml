@@ -11,13 +11,17 @@
         <relativePath/>
     </parent>
 
-    <groupId>ru.practicum</groupId>
+    <groupId>ru.yandex.practicum</groupId>
     <artifactId>bank-app</artifactId>
     <version>1.0</version>
     <packaging>pom</packaging>
 
     <modules>
         <module>front</module>
+        <module>accounts</module>
+        <module>cash</module>
+        <module>transfer</module>
+        <module>notifications</module>
     </modules>
 
     <properties>

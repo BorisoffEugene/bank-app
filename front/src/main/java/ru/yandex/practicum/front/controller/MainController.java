@@ -1,4 +1,4 @@
-package ru.yandex.practicum.mybankfront.controller;
+package ru.yandex.practicum.front.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -6,8 +6,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import ru.yandex.practicum.mybankfront.controller.dto.CashAction;
-import ru.yandex.practicum.mybankfront.controller.stub.AccountStub;
+import ru.yandex.practicum.front.controller.dto.CashAction;
+import ru.yandex.practicum.front.controller.stub.AccountStub;
 
 import java.time.LocalDate;
 
