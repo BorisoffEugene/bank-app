@@ -4,3 +4,27 @@ server:
 spring:
   application:
     name: bank-gateway
+  main:
+    web-application-type: reactive
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/realms/bank-realm
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: bank-accounts
+              uri: http://localhost:8082
+              predicates:
+                - Path=/account/**
+              filters:
+                - name: JwtTokenRelay
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
