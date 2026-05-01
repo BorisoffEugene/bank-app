@@ -1,0 +1,13 @@
+package ru.yandex.practicum.gateway;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class BankAppGatewayApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(BankAppGatewayApplication.class, args);
+    }
+
+}

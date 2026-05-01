@@ -1,2 +1,6 @@
 server:
-  port: 8083
+  port: 8085
+
+spring:
+  application:
+    name: bank-notifications
