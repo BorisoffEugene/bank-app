@@ -4,6 +4,7 @@
 
 ## Названия и адреса модулей и сопровождающих сервисов
 * Сервер авторизации OAuth 2.0: Keycloak (http://localhost:8080) 
+* База данных: postgresql 17 (jdbc:postgresql://localhost:5432/postgres)
 * Фронт: bank-front (http://localhost:8081)
 * Аккаунты: bank-accounts (http://localhost:8082)
 * Обналичивание денег: bank-cash (http://localhost:8083)
