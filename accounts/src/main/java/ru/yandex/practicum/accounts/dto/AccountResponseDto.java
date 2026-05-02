@@ -10,7 +10,6 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 public class AccountResponseDto {
-    private String login;
     private String name;
     private LocalDate birthdate;
     private int sum;

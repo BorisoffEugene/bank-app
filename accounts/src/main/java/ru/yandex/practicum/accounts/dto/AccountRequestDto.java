@@ -12,6 +12,9 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 public class AccountRequestDto {
+    @NotBlank(message = "Логин должен быть")
+    private String login;
+
     @NotBlank(message = "Поле 'Фамилия' должно быть заполнено")
     private String name;
 

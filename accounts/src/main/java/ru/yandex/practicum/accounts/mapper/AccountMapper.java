@@ -8,8 +8,6 @@ import ru.yandex.practicum.accounts.model.Account;
 
 @Mapper(componentModel = "spring")
 public interface AccountMapper {
-    @Mapping(target = "login", ignore = true)
     Account toEntity(AccountRequestDto dto);
-
-    AccountResponseDto toDto(Account user);
+    AccountResponseDto toDto(Account account);
 }
