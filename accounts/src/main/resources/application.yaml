@@ -4,6 +4,11 @@ server:
 spring:
   application:
     name: bank-accounts
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/realms/bank-realm
   sql:
     init:
       mode: always
@@ -15,3 +20,13 @@ spring:
       hibernate:
         ddl-auto: update
       show-sql: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+logging:
+  level:
+    root: INFO

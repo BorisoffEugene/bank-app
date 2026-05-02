@@ -38,7 +38,7 @@ public class MainController {
 
     @GetMapping("/account")
     public String getAccount(Model model, @AuthenticationPrincipal UserDetails userDetails) {
-        AccountResponseDto response = accountClient.findByLogin(userDetails.getUsername());
+        AccountResponseDto response = accountClient.findByLogin("ivanov");
 
         model.addAttribute("name", response.name());
         model.addAttribute("birthdate", response.birthdate().format(DateTimeFormatter.ISO_DATE));
@@ -56,7 +56,7 @@ public class MainController {
             @RequestParam("name") String name, @RequestParam("birthdate") LocalDate birthdate,
             @AuthenticationPrincipal UserDetails userDetails
     ) {
-        AccountResponseDto response = accountClient.save(new AccountRequestDto(userDetails.getUsername(), name, birthdate, (Integer) model.getAttribute("sum")));
+        AccountResponseDto response = accountClient.save(new AccountRequestDto("ivanov", name, birthdate, (Integer) model.getAttribute("sum")));
 
         model.addAttribute("name", response.name());
         model.addAttribute("birthdate", response.birthdate().format(DateTimeFormatter.ISO_DATE));

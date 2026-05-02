@@ -19,7 +19,7 @@ public class AccountClient {
     public AccountResponseDto findByLogin(String login) {
         return gatewayWebClient
                 .get()
-                .uri(gatewayBaseUrl + "/account/{login}", login)
+                .uri(gatewayBaseUrl + "/account")
                 .retrieve()
                 .bodyToMono(AccountResponseDto.class)
                 .block();

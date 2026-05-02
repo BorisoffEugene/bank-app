@@ -22,3 +22,7 @@ spring:
 bank:
   gateway:
     base-url: http://localhost:8086
+
+logging:
+  level:
+    root: INFO
