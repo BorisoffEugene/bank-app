@@ -13,15 +13,13 @@ spring:
           issuer-uri: http://localhost:8080/realms/bank-realm
   cloud:
     gateway:
-      server:
-        webflux:
-          routes:
-            - id: bank-accounts
-              uri: http://localhost:8082
-              predicates:
-                - Path=/account/**
-              filters:
-                - name: JwtTokenRelay
+      routes:
+        - id: bank-accounts
+          uri: http://localhost:8082
+          predicates:
+            - Path=/account/**
+          filters:
+            - name: JwtTokenRelay
 
 management:
   endpoints:
@@ -33,5 +31,6 @@ logging:
   level:
     root: INFO
     ru.yandex.practicum.gateway: DEBUG
-    org.springframework.cloud.gateway: DEBUG
+    org.springframework.cloud.gateway: TRACE
     org.springframework.security: DEBUG
+    reactor.netty.http.client: DEBUG

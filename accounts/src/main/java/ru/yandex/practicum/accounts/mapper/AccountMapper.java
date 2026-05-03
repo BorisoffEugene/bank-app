@@ -8,6 +8,8 @@ import ru.yandex.practicum.accounts.model.Account;
 
 @Mapper(componentModel = "spring")
 public interface AccountMapper {
+    @Mapping(target = "sum", ignore = true)
     Account toEntity(AccountRequestDto dto);
+
     AccountResponseDto toDto(Account account);
 }

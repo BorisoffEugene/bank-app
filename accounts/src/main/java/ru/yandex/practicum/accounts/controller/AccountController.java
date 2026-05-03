@@ -18,9 +18,9 @@ public class AccountController {
         return accountService.save(dto);
     }
 
-    @GetMapping
-    public AccountResponseDto findByLogin(String login) {
-        return accountService.findByLogin("ivanov");
+    @GetMapping("/{login}")
+    public AccountResponseDto findByLogin(@PathVariable String login) {
+        return accountService.findByLogin(login);
     }
 
 }
