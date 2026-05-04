@@ -23,6 +23,6 @@ public class AccountService {
     public AccountResponseDto findByLogin(String login) {
         return repository.findByLogin(login)
                 .map(mapper::toDto)
-                .orElseThrow(() -> new IllegalArgumentException("Логин '" + login + "' не найден"));
+                .orElseThrow(() -> new IllegalArgumentException("Ваши данные отсутствуют в базе. Заполните данные и нажмите 'Сохранить'"));
     }
 }

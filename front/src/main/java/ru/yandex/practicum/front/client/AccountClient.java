@@ -1,10 +1,13 @@
 package ru.yandex.practicum.front.client;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 import ru.yandex.practicum.front.controller.dto.AccountRequestDto;
 import ru.yandex.practicum.front.controller.dto.AccountResponseDto;
+import ru.yandex.practicum.front.controller.dto.ErrorResponse;
 
 @Component
 public class AccountClient {
@@ -21,6 +24,10 @@ public class AccountClient {
                 .get()
                 .uri(gatewayBaseUrl + "/account/{login}", login)
                 .retrieve()
+                .onStatus(HttpStatusCode::isError,
+                        clientResponse -> clientResponse.bodyToMono(ErrorResponse.class)
+                                .flatMap(errorBody -> Mono.error(new Exception(errorBody.message())))
+                )
                 .bodyToMono(AccountResponseDto.class)
                 .block();
     }
@@ -31,6 +38,10 @@ public class AccountClient {
                 .uri(gatewayBaseUrl + "/account")
                 .bodyValue(request)
                 .retrieve()
+                .onStatus(HttpStatusCode::isError,
+                        clientResponse -> clientResponse.bodyToMono(ErrorResponse.class)
+                                .flatMap(errorBody -> Mono.error(new Exception(errorBody.message())))
+                )
                 .bodyToMono(AccountResponseDto.class)
                 .block();
     }

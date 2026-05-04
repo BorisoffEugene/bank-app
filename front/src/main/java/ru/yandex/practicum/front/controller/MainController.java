@@ -31,6 +31,17 @@ public class MainController {
         this.accountClient = accountClient;
     }
 
+    private String showMain(Model model, AccountResponseDto response, String errors, String info) {
+        model.addAttribute("name", response.name());
+        model.addAttribute("birthdate", ((response.birthdate() != null) ? response.birthdate() : LocalDate.now()).format(DateTimeFormatter.ISO_DATE));
+        model.addAttribute("sum", response.sum());
+        model.addAttribute("accounts", new ArrayList<AccountDto>()); // todo
+        model.addAttribute("errors", errors);
+        model.addAttribute("info", info);
+
+        return "main";
+    }
+
     @GetMapping
     public String index() {
         return "redirect:/account";
@@ -38,16 +49,16 @@ public class MainController {
 
     @GetMapping("/account")
     public String getAccount(Model model, @AuthenticationPrincipal UserDetails userDetails) {
-        AccountResponseDto response = accountClient.findByLogin(userDetails.getUsername());
+        String info = null;
+        AccountResponseDto response;
+        try {
+             response = accountClient.findByLogin("ivanov");
+        } catch (Exception e) {
+            info = e.getMessage();
+            response = new AccountResponseDto(null, null, 0);
+        }
 
-        model.addAttribute("name", response.name());
-        model.addAttribute("birthdate", response.birthdate().format(DateTimeFormatter.ISO_DATE));
-        model.addAttribute("sum", response.sum());
-        model.addAttribute("accounts", new ArrayList<AccountDto>()); // todo
-        model.addAttribute("errors", null); // todo
-        model.addAttribute("info", null); // todo
-
-        return "main";
+        return showMain(model, response, null, info);
     }
 
     @PostMapping("/account")
@@ -56,16 +67,18 @@ public class MainController {
             @RequestParam("name") String name, @RequestParam("birthdate") LocalDate birthdate,
             @AuthenticationPrincipal UserDetails userDetails
     ) {
-        AccountResponseDto response = accountClient.save(new AccountRequestDto("ivanov", name, birthdate));
+        String errors = null;
+        String info = "Данные сохранены";
+        AccountResponseDto response;
+        try {
+            response = accountClient.save(new AccountRequestDto("ivanov", name, birthdate));
+        } catch (Exception e) {
+            errors = e.getMessage();
+            info = null;
+            response = new AccountResponseDto(null, null, 0);
+        }
 
-        model.addAttribute("name", response.name());
-        model.addAttribute("birthdate", response.birthdate().format(DateTimeFormatter.ISO_DATE));
-        model.addAttribute("sum", response.sum());
-        model.addAttribute("accounts", new ArrayList<AccountDto>()); // todo
-        model.addAttribute("errors", null); // todo
-        model.addAttribute("info", null); // todo
-
-        return "main";
+        return showMain(model, response, errors, info);
     }
 
     /**

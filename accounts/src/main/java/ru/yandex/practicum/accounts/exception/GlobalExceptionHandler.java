@@ -33,7 +33,7 @@ public class GlobalExceptionHandler {
                         DefaultMessageSourceResolvable::getDefaultMessage,
                         (existing, replacement) -> existing
                 ));
-        return new ErrorResponse("Ошибка валидации", errors);
+        return new ErrorResponse(errors.toString());
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
