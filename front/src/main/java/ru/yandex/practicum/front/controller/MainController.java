@@ -1,8 +1,6 @@
 package ru.yandex.practicum.front.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -48,11 +46,11 @@ public class MainController {
     }
 
     @GetMapping("/account")
-    public String getAccount(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+    public String getAccount(Model model) {
         String info = null;
         AccountResponseDto response;
         try {
-             response = accountClient.findByLogin("ivanov");
+             response = accountClient.findByLogin();
         } catch (Exception e) {
             info = e.getMessage();
             response = new AccountResponseDto(null, null, 0);
@@ -62,16 +60,12 @@ public class MainController {
     }
 
     @PostMapping("/account")
-    public String editAccount(
-            Model model,
-            @RequestParam("name") String name, @RequestParam("birthdate") LocalDate birthdate,
-            @AuthenticationPrincipal UserDetails userDetails
-    ) {
+    public String editAccount(Model model, @RequestParam("name") String name, @RequestParam("birthdate") LocalDate birthdate) {
         String errors = null;
         String info = "Данные сохранены";
         AccountResponseDto response;
         try {
-            response = accountClient.save(new AccountRequestDto("ivanov", name, birthdate));
+            response = accountClient.save(new AccountRequestDto(name, birthdate));
         } catch (Exception e) {
             errors = e.getMessage();
             info = null;

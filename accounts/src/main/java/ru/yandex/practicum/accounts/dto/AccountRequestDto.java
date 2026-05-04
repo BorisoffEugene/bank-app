@@ -4,15 +4,16 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import ru.yandex.practicum.accounts.annotation.Adult;
 
 import java.time.LocalDate;
 
 @Getter
+@Setter
 @AllArgsConstructor
 @Builder
 public class AccountRequestDto {
-    @NotBlank(message = "Логин должен быть")
     private String login;
 
     @NotBlank(message = "Поле 'Фамилия' должно быть заполнено")

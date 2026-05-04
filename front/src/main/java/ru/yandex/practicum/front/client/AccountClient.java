@@ -19,10 +19,10 @@ public class AccountClient {
         this.gatewayBaseUrl = gatewayBaseUrl;
     }
 
-    public AccountResponseDto findByLogin(String login) {
+    public AccountResponseDto findByLogin() {
         return gatewayWebClient
                 .get()
-                .uri(gatewayBaseUrl + "/account/{login}", login)
+                .uri(gatewayBaseUrl + "/account")
                 .retrieve()
                 .onStatus(HttpStatusCode::isError,
                         clientResponse -> clientResponse.bodyToMono(ErrorResponse.class)
