@@ -15,6 +15,7 @@ public class NotificationController {
     private final NotificationLogService notificationLogService;
 
     @PostMapping
+    //@PreAuthorize("hasRole('SERVICE') && hasAuthority('notifications.write')") todo
     public void send(@RequestBody NotificationDto dto) {
         notificationLogService.send(dto);
     }
