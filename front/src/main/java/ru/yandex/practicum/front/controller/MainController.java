@@ -16,6 +16,7 @@ import ru.yandex.practicum.front.controller.stub.AccountStub;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class MainController {
@@ -33,11 +34,21 @@ public class MainController {
         model.addAttribute("name", response.name());
         model.addAttribute("birthdate", ((response.birthdate() != null) ? response.birthdate() : LocalDate.now()).format(DateTimeFormatter.ISO_DATE));
         model.addAttribute("sum", response.sum());
-        model.addAttribute("accounts", new ArrayList<AccountDto>()); // todo
         model.addAttribute("errors", errors);
         model.addAttribute("info", info);
 
         return "main";
+    }
+
+    private void addOtherAccounts(Model model) {
+        List<AccountResponseDto> accounts;
+        try {
+            accounts = accountClient.findOtherAccounts();
+        } catch (Exception e) {
+            accounts = new ArrayList<>();
+        }
+
+        model.addAttribute("accounts", accounts);
     }
 
     @GetMapping
@@ -47,16 +58,17 @@ public class MainController {
 
     @GetMapping("/account")
     public String getAccount(Model model) {
-        String info = null;
+        String errors = null;
         AccountResponseDto response;
         try {
              response = accountClient.findByLogin();
         } catch (Exception e) {
-            info = e.getMessage();
-            response = new AccountResponseDto(null, null, 0);
+            errors = e.getMessage();
+            response = new AccountResponseDto(null, null, null, 0);
         }
 
-        return showMain(model, response, null, info);
+        addOtherAccounts(model);
+        return showMain(model, response, errors, null);
     }
 
     @PostMapping("/account")
@@ -69,9 +81,10 @@ public class MainController {
         } catch (Exception e) {
             errors = e.getMessage();
             info = null;
-            response = new AccountResponseDto(null, null, 0);
+            response = new AccountResponseDto(null, null, null, 0);
         }
 
+        addOtherAccounts(model);
         return showMain(model, response, errors, info);
     }
 

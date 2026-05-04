@@ -2,16 +2,14 @@ package ru.yandex.practicum.accounts.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.accounts.dto.AccountRequestDto;
 import ru.yandex.practicum.accounts.dto.AccountResponseDto;
 import ru.yandex.practicum.accounts.service.AccountService;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,4 +28,8 @@ public class AccountController {
         return accountService.findByLogin(jwt.getClaimAsString("preferred_username"));
     }
 
+    @GetMapping("/other-accounts")
+    public List<AccountResponseDto> findOtherAccounts(@AuthenticationPrincipal Jwt jwt) {
+        return accountService.findOtherAccounts(jwt.getClaimAsString("preferred_username"));
+    }
 }

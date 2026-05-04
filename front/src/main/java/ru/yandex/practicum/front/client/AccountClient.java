@@ -9,6 +9,8 @@ import ru.yandex.practicum.front.controller.dto.AccountRequestDto;
 import ru.yandex.practicum.front.controller.dto.AccountResponseDto;
 import ru.yandex.practicum.front.controller.dto.ErrorResponse;
 
+import java.util.List;
+
 @Component
 public class AccountClient {
     private final WebClient gatewayWebClient;
@@ -43,6 +45,20 @@ public class AccountClient {
                                 .flatMap(errorBody -> Mono.error(new Exception(errorBody.message())))
                 )
                 .bodyToMono(AccountResponseDto.class)
+                .block();
+    }
+
+    public List<AccountResponseDto> findOtherAccounts() {
+        return gatewayWebClient
+                .get()
+                .uri(gatewayBaseUrl + "/account/other-accounts")
+                .retrieve()
+                .onStatus(HttpStatusCode::isError,
+                        clientResponse -> clientResponse.bodyToMono(ErrorResponse.class)
+                                .flatMap(errorBody -> Mono.error(new Exception(errorBody.message())))
+                )
+                .bodyToFlux(AccountResponseDto.class)
+                .collectList()
                 .block();
     }
 }

@@ -8,6 +8,9 @@ import ru.yandex.practicum.accounts.mapper.AccountMapper;
 import ru.yandex.practicum.accounts.model.Account;
 import ru.yandex.practicum.accounts.repository.AccountRepository;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class AccountService {
@@ -24,5 +27,12 @@ public class AccountService {
         return repository.findByLogin(login)
                 .map(mapper::toDto)
                 .orElseThrow(() -> new IllegalArgumentException("Ваши данные отсутствуют в базе. Заполните данные и нажмите 'Сохранить'"));
+    }
+
+    public List<AccountResponseDto> findOtherAccounts(String login) {
+        return repository.findByLoginNot(login)
+                .stream()
+                .map(mapper::toDto)
+                .collect(Collectors.toList());
     }
 }
