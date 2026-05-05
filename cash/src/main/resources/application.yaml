@@ -4,3 +4,21 @@ server:
 spring:
   application:
     name: bank-cash
+  sql:
+    init:
+      mode: always
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: postgres
+    jpa:
+      hibernate:
+        ddl-auto: update
+      show-sql: true
+
+logging:
+  level:
+    root: INFO
+    org:
+      hibernate:
+        SQL: DEBUG
