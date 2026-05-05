@@ -1,4 +1,4 @@
-package ru.yandex.practicum.cash.config;
+package ru.yandex.practicum.transfer.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,10 +32,10 @@ public class WebClientConfig {
     }
 
     @Bean
-    public WebClient cashWebClient(OAuth2AuthorizedClientManager authorizedClientManager) {
+    public WebClient transferWebClient(OAuth2AuthorizedClientManager authorizedClientManager) {
         ServletOAuth2AuthorizedClientExchangeFilterFunction oauth2 = new ServletOAuth2AuthorizedClientExchangeFilterFunction(authorizedClientManager);
 
-        oauth2.setDefaultClientRegistrationId("bank-cash");
+        oauth2.setDefaultClientRegistrationId("bank-transfer");
 
         return WebClient.builder()
                 .apply(oauth2.oauth2Configuration())
