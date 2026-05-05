@@ -1,15 +1,18 @@
-package ru.yandex.practicum.cash.config;
+package ru.yandex.practicum.accounts.config;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.oauth2.client.*;
+import org.springframework.security.oauth2.client.AuthorizedClientServiceOAuth2AuthorizedClientManager;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientManager;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientProvider;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientProviderBuilder;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.web.reactive.function.client.ServletOAuth2AuthorizedClientExchangeFilterFunction;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Configuration
-public class NotificationClientConfig {
+public class WebClientConfig {
 
     @Bean
     public OAuth2AuthorizedClientManager authorizedClientManager(
@@ -33,16 +36,12 @@ public class NotificationClientConfig {
     }
 
     @Bean
-    public WebClient cashWebClient(
-            OAuth2AuthorizedClientManager authorizedClientManager,
-            @Value("${bank.notifications.base-url}") String cashServiceBaseUrl
-    ) {
+    public WebClient accountsWebClient(OAuth2AuthorizedClientManager authorizedClientManager) {
         ServletOAuth2AuthorizedClientExchangeFilterFunction oauth2 = new ServletOAuth2AuthorizedClientExchangeFilterFunction(authorizedClientManager);
 
-        oauth2.setDefaultClientRegistrationId("bank-cash");
+        oauth2.setDefaultClientRegistrationId("bank-accounts");
 
         return WebClient.builder()
-                .baseUrl(cashServiceBaseUrl)
                 .apply(oauth2.oauth2Configuration())
                 .build();
     }
