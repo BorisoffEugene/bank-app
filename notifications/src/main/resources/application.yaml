@@ -19,3 +19,5 @@ management:
 logging:
   level:
     root: INFO
+    ru.yandex.practicum.notifications: DEBUG
+    org.springframework.security: DEBUG

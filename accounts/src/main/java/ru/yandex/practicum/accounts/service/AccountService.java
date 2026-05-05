@@ -1,6 +1,7 @@
 package ru.yandex.practicum.accounts.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.accounts.client.NotificationClient;
 import ru.yandex.practicum.accounts.dto.AccountRequestDto;
@@ -23,6 +24,7 @@ public class AccountService {
     public AccountResponseDto save(AccountRequestDto dto) {
         notificationClient.send(new NotificationDto(String.format("Данные клиента по логину '%s' изменены", dto.getLogin())));
 
+
         Account account = mapper.toEntity(dto);
         Account saved = repository.save(account);
         return mapper.toDto(saved);
@@ -37,7 +39,7 @@ public class AccountService {
     }
 
     public List<AccountResponseDto> findOtherAccounts(String login) {
-        notificationClient.send(new NotificationDto(String.format("Запрос списка клиентов для перевода денег для логина %s", login)));
+        notificationClient.send(new NotificationDto(String.format("Запрос списка клиентов для перевода денег для логина '%s'", login)));
 
         return repository.findByLoginNot(login)
                 .stream()

@@ -17,6 +17,8 @@ public class NotificationClient {
                 .post()
                 .uri("/notification")
                 .bodyValue(request)
-                .retrieve();
+                .retrieve()
+                .bodyToMono(Void.class)
+                .block();
     }
 }

@@ -1,6 +1,7 @@
 package ru.yandex.practicum.notifications.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +16,7 @@ public class NotificationController {
     private final NotificationLogService notificationLogService;
 
     @PostMapping
-    //@PreAuthorize("hasRole('SERVICE') && hasAuthority('notifications.write')") todo
+    @PreAuthorize("hasRole('SERVICE') && hasAuthority('notification.write')")
     public void send(@RequestBody NotificationDto dto) {
         notificationLogService.send(dto);
     }

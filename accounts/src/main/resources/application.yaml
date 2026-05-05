@@ -14,7 +14,7 @@ spring:
           bank-accounts:
             provider: keycloak
             client-id: bank-accounts
-            client-secret: bank-accounts-secret
+            client-secret: qAvEGuz3huMYEk0SJluuUm6HriQZYyTX
             authorization-grant-type: client_credentials
         provider:
           keycloak:
@@ -44,6 +44,8 @@ bank:
 logging:
   level:
     root: INFO
+    ru.yandex.practicum.accounts: DEBUG
+    org.springframework.security: DEBUG
     org:
       hibernate:
         SQL: DEBUG

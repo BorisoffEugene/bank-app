@@ -60,8 +60,8 @@ public class SecurityConfig {
                 .map(role -> (GrantedAuthority) new SimpleGrantedAuthority("ROLE_" + role))
                 .collect(Collectors.toList());
 
-        if (roles.contains("NOTIFICATIONS_WRITE")) {
-            authorities.add(new SimpleGrantedAuthority("notifications.write"));
+        if (roles.contains("NOTIFICATION_WRITE")) {
+            authorities.add(new SimpleGrantedAuthority("notification.write"));
         }
 
         return authorities;
