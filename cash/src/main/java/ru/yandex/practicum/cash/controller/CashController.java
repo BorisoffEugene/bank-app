@@ -2,6 +2,7 @@ package ru.yandex.practicum.cash.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,7 +20,7 @@ public class CashController {
     private final CashService cashService;
 
     @PostMapping
-    //@PreAuthorize("hasRole('USER') && hasAuthority('cash.write')") todo
+    @PreAuthorize("hasRole('USER') && hasAuthority('cash.write')")
     public CashResponseDto save(@RequestBody @Valid CashRequestDto dto, @AuthenticationPrincipal Jwt jwt) {
         dto.setAccount(jwt.getClaimAsString("preferred_username"));
         return cashService.save(dto);

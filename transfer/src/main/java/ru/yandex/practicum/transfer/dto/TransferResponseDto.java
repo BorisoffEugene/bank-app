@@ -11,6 +11,6 @@ public class TransferResponseDto {
     private String accountFrom;
     private String accountTo;
     private int amount;
-    private ActionStatus status;
+    private String status;
     private String error;
 }

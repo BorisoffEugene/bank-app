@@ -2,6 +2,7 @@ package ru.yandex.practicum.transfer.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,7 +20,7 @@ public class TransferController {
     private final TransferService transferService;
 
     @PostMapping
-    //@PreAuthorize("hasRole('USER') && hasAuthority('cash.write')") todo
+    @PreAuthorize("hasRole('USER') && hasAuthority('transfer.write')")
     public TransferResponseDto save(@RequestBody @Valid TransferRequestDto dto, @AuthenticationPrincipal Jwt jwt) {
         dto.setAccountFrom(jwt.getClaimAsString("preferred_username"));
         return transferService.save(dto);

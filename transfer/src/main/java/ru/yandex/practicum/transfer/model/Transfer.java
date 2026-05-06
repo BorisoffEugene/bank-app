@@ -3,8 +3,6 @@ package ru.yandex.practicum.transfer.model;
 import jakarta.persistence.*;
 import lombok.*;
 
-import ru.yandex.practicum.transfer.dto.ActionStatus;
-
 import java.time.LocalDateTime;
 
 @Getter
@@ -18,7 +16,7 @@ public class Transfer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, columnDefinition = "timestamp default localtimestamp")
+    @Column(nullable = false, insertable = false, columnDefinition = "timestamp default localtimestamp")
     private LocalDateTime createDate;
 
     @Column(nullable = false)
@@ -30,8 +28,8 @@ public class Transfer {
     @Column(nullable = false)
     private int amount;
 
-    @Column(nullable = false, columnDefinition = "varchar default 'OK'")
-    private ActionStatus status;
+    @Column(nullable = false, insertable = false, columnDefinition = "varchar default 'OK'")
+    private String status;
 
     private String error;
 }
