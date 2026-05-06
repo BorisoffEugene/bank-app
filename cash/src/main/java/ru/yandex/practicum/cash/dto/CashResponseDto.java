@@ -9,8 +9,8 @@ import lombok.Getter;
 @Builder
 public class CashResponseDto {
     private String account;
-    private CashAction action;
+    private String action;
     private int amount;
-    private ActionStatus status;
+    private String status;
     private String error;
 }

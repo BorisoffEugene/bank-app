@@ -3,9 +3,6 @@ package ru.yandex.practicum.cash.model;
 import jakarta.persistence.*;
 import lombok.*;
 
-import ru.yandex.practicum.cash.dto.ActionStatus;
-import ru.yandex.practicum.cash.dto.CashAction;
-
 import java.time.LocalDateTime;
 
 @Getter
@@ -19,20 +16,20 @@ public class Cash {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, columnDefinition = "timestamp default localtimestamp")
+    @Column(nullable = false, insertable = false, columnDefinition = "timestamp default localtimestamp")
     private LocalDateTime createDate;
 
     @Column(nullable = false)
     private String account;
 
     @Column(nullable = false)
-    private CashAction action;
+    private String action;
 
     @Column(nullable = false)
     private int amount;
 
-    @Column(nullable = false, columnDefinition = "varchar default 'OK'")
-    private ActionStatus status;
+    @Column(nullable = false, insertable = false, columnDefinition = "varchar default 'OK'")
+    private String status;
 
     private String error;
 }

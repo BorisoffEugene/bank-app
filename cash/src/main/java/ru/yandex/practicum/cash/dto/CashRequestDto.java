@@ -15,7 +15,7 @@ public class CashRequestDto {
     private String account;
 
     @NotBlank(message = "Действие не должно быть пустым")
-    private CashAction action;
+    private String action;
 
     @Positive(message = "Сумма должна быть больше нуля")
     private int amount;
