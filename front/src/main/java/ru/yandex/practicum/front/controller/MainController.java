@@ -99,7 +99,7 @@ public class MainController {
         String info = String.format("Успешное %s %d руб.", (action == CashAction.GET) ? "снятие" : "пополнение на", value);
 
         try {
-            cashClient.save(new CashRequestDto(action.name(), value));
+            cashClient.save(new CashRequestDto(action.name(), value, "OK"));
         } catch (Exception e) {
             errors = e.getMessage();
             info = null;

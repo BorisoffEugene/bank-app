@@ -19,4 +19,6 @@ public class CashRequestDto {
 
     @Positive(message = "Сумма должна быть больше нуля")
     private int amount;
+
+    private String status;
 }

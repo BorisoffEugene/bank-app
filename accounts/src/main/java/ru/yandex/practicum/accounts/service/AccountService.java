@@ -52,7 +52,7 @@ public class AccountService {
 
         int sum = response.getSum();
         if (dto.getAction().equals("GET") && sum < dto.getAmount())
-            new IllegalArgumentException("Недостаточно средств на счету");
+            throw new IllegalArgumentException("Недостаточно средств на счету");
 
         sum += dto.getAmount() * (dto.getAction().equals("GET") ? -1 : 1);
 

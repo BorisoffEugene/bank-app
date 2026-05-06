@@ -2,6 +2,7 @@ package ru.yandex.practicum.cash.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.cash.client.AccountClient;
 import ru.yandex.practicum.cash.client.NotificationClient;
 import ru.yandex.practicum.cash.dto.CashRequestDto;
 import ru.yandex.practicum.cash.dto.CashResponseDto;
@@ -16,6 +17,7 @@ public class CashService {
     private final CashRepository repository;
     private final CashMapper mapper;
     private final NotificationClient notificationClient;
+    private final AccountClient accountClient;
 
     public CashResponseDto save(CashRequestDto dto) {
         notificationClient.send(new NotificationDto(String.format(
@@ -25,8 +27,15 @@ public class CashService {
                 dto.getAmount()
         )));
 
-        if (dto.getAction().equals("PUT")) {
+        try {
+            accountClient.changeSum(dto);
+        } catch (Exception e) {
+            Cash cash = mapper.toEntity(dto);
+            cash.setStatus("ERROR");
+            cash.setError(e.getMessage());
+            repository.save(cash);
 
+            throw new IllegalArgumentException(e.getMessage());
         }
 
         Cash cash = mapper.toEntity(dto);

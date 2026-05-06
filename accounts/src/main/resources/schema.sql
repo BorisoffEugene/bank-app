@@ -6,7 +6,7 @@ create table if not exists accounts.accounts(
     login varchar primary key,
     name varchar not null,
     birthdate date not null,
-    sum int not null default 0
+    sum int not null default 0 check(sum >= 0)
 );
 
 comment on table accounts.accounts is 'Акаунт';
