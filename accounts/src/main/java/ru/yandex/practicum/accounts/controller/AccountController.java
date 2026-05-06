@@ -8,6 +8,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.accounts.dto.AccountRequestDto;
 import ru.yandex.practicum.accounts.dto.AccountResponseDto;
+import ru.yandex.practicum.accounts.dto.CashRequestDto;
 import ru.yandex.practicum.accounts.service.AccountService;
 
 import java.util.List;
@@ -36,4 +37,11 @@ public class AccountController {
     public List<AccountResponseDto> findOtherAccounts(@AuthenticationPrincipal Jwt jwt) {
         return accountService.findOtherAccounts(jwt.getClaimAsString("preferred_username"));
     }
+
+    @PostMapping("/change")
+    //@PreAuthorize("hasRole('SERVICE') && hasAuthority('accounts.write')") todo
+    public void changeSum(@RequestBody @Valid CashRequestDto dto) {
+        accountService.changeSum(dto);
+    }
+
 }

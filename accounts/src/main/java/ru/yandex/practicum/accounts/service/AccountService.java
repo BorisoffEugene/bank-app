@@ -1,11 +1,11 @@
 package ru.yandex.practicum.accounts.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.accounts.client.NotificationClient;
 import ru.yandex.practicum.accounts.dto.AccountRequestDto;
 import ru.yandex.practicum.accounts.dto.AccountResponseDto;
+import ru.yandex.practicum.accounts.dto.CashRequestDto;
 import ru.yandex.practicum.accounts.dto.NotificationDto;
 import ru.yandex.practicum.accounts.mapper.AccountMapper;
 import ru.yandex.practicum.accounts.model.Account;
@@ -45,5 +45,17 @@ public class AccountService {
                 .stream()
                 .map(mapper::toDto)
                 .collect(Collectors.toList());
+    }
+
+    public void changeSum(CashRequestDto dto) {
+        AccountResponseDto response = findByLogin(dto.getAccount());
+
+        int sum = response.getSum();
+        if (dto.getAction().equals("GET") && sum < dto.getAmount())
+            new IllegalArgumentException("Недостаточно средств на счету");
+
+        sum += dto.getAmount() * (dto.getAction().equals("GET") ? -1 : 1);
+
+        save(new AccountRequestDto(response.getLogin(), response.getName(), response.getBirthdate(), sum));
     }
 }

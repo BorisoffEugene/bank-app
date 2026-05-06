@@ -28,13 +28,33 @@ public class MainController {
     }
 
     private String showMain(Model model, AccountResponseDto response, String errors, String info) {
+        addOtherAccounts(model);
+
+        if (response == null) {
+            try {
+                response = accountClient.findByLogin();
+            } catch (Exception e) {
+                model.addAttribute("errors", e.getMessage());
+                return "main";
+            }
+        }
+
         model.addAttribute("name", response.name());
-        model.addAttribute("birthdate", ((response.birthdate() != null) ? response.birthdate() : LocalDate.now()).format(DateTimeFormatter.ISO_DATE));
+        model.addAttribute("birthdate", (response.birthdate() == null) ? null : response.birthdate().format(DateTimeFormatter.ISO_DATE));
         model.addAttribute("sum", response.sum());
+
         model.addAttribute("errors", errors);
         model.addAttribute("info", info);
 
         return "main";
+    }
+
+    private String showMain(Model model) {
+        return showMain(model, null, null, null);
+    }
+
+    private String showMain(Model model, String errors, String info) {
+        return showMain(model, null, errors, info);
     }
 
     private void addOtherAccounts(Model model) {
@@ -55,46 +75,51 @@ public class MainController {
 
     @GetMapping("/account")
     public String getAccount(Model model) {
-        String errors = null;
-        AccountResponseDto response;
-        try {
-             response = accountClient.findByLogin();
-        } catch (Exception e) {
-            errors = e.getMessage();
-            response = new AccountResponseDto(null, null, null, 0);
-        }
-
-        addOtherAccounts(model);
-        return showMain(model, response, errors, null);
+        return showMain(model);
     }
 
     @PostMapping("/account")
-    public String editAccount(Model model, @RequestParam("name") String name, @RequestParam("birthdate") LocalDate birthdate) {
+    public String editAccount(Model model, @RequestParam String name, @RequestParam LocalDate birthdate, @RequestParam int sum) {
         String errors = null;
         String info = "Данные сохранены";
-        AccountResponseDto response;
+
         try {
-            response = accountClient.save(new AccountRequestDto(name, birthdate));
+            accountClient.save(new AccountRequestDto(name, birthdate, sum));
         } catch (Exception e) {
             errors = e.getMessage();
             info = null;
-            response = new AccountResponseDto(null, null, null, 0);
         }
 
-        addOtherAccounts(model);
-        return showMain(model, response, errors, info);
+        return showMain(model, errors, info);
     }
 
     @PostMapping("/cash")
-    public String editCash(Model model, @RequestParam("value") int value, @RequestParam("action") CashAction action) {
-        CashResponseDto response = cashClient.save(new CashRequestDto(action.name(), value));
-        return "main";
+    public String editCash(Model model, @RequestParam int value, @RequestParam CashAction action) {
+        String errors = null;
+        String info = String.format("Успешное %s %d руб.", (action == CashAction.GET) ? "снятие" : "пополнение на", value);
+
+        try {
+            cashClient.save(new CashRequestDto(action.name(), value));
+        } catch (Exception e) {
+            errors = e.getMessage();
+            info = null;
+        }
+
+        return showMain(model, errors, info);
     }
 
     @PostMapping("/transfer")
-    public String transfer(Model model, @RequestParam("value") int value, @RequestParam("login") String login) {
-        TransferResponseDto response = transferClient.save(new TransferRequestDto(login, value));
+    public String transfer(Model model, @RequestParam int value, @RequestParam String login) {
+        String errors = null;
+        String info = String.format("Успешно переведено %d руб.", value);
 
-        return "main";
+        try {
+            transferClient.save(new TransferRequestDto(login, value));
+        } catch (Exception e) {
+            errors = e.getMessage();
+            info = null;
+        }
+
+        return showMain(model, errors, info);
     }
 }

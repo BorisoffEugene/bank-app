@@ -1,10 +1,8 @@
 package ru.yandex.practicum.accounts.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.validation.constraints.PositiveOrZero;
+import lombok.*;
 import ru.yandex.practicum.accounts.annotation.Adult;
 
 import java.time.LocalDate;
@@ -21,4 +19,7 @@ public class AccountRequestDto {
 
     @Adult()
     private LocalDate birthdate;
+
+    @PositiveOrZero
+    private int sum;
 }

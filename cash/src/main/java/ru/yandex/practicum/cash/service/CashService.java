@@ -25,6 +25,10 @@ public class CashService {
                 dto.getAmount()
         )));
 
+        if (dto.getAction().equals("PUT")) {
+
+        }
+
         Cash cash = mapper.toEntity(dto);
         Cash saved = repository.save(cash);
         return mapper.toDto(saved);
