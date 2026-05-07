@@ -9,6 +9,16 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: http://localhost:8080/realms/bank-realm
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        service-name: notification-service
+      config:
+        enabled: true
+        prefix: config
+        defaultContext: application
 
 management:
   endpoints:

@@ -40,14 +40,14 @@ public class AccountController {
     }
 
     @PostMapping("/change")
-    @PreAuthorize("hasRole('SERVICE') && hasAuthority('accounts.write')")
+    //@PreAuthorize("hasRole('SERVICE') && hasAuthority('accounts.write')") todo
     public void changeSum(@RequestBody @Valid CashRequestDto dto) {
         accountService.changeSum(dto);
     }
 
     @PostMapping("/transfer")
-    //@PreAuthorize("hasRole('SERVICE') && hasAuthority('accounts.write')") todo
-    public void changeSum(@RequestBody @Valid TransferRequestDto dto) {
+    @PreAuthorize("hasRole('SERVICE') && hasAuthority('accounts.write')")
+    public void transfer(@RequestBody @Valid TransferRequestDto dto) {
         accountService.transfer(dto);
     }
 }

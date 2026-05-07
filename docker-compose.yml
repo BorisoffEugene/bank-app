@@ -11,3 +11,9 @@ services:
       KC_HOSTNAME: localhost
     ports:
       - "8080:8080"
+  consul:
+    image: hashicorp/consul:1.15
+    container_name: consul-server
+    ports:
+      - "8500:8500"
+    command: "agent -server -bootstrap-expect=1 -ui -bind=0.0.0.0 -client=0.0.0.0"

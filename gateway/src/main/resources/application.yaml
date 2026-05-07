@@ -32,6 +32,9 @@ spring:
             - Path=/transfer/**
           filters:
             - name: JwtTokenRelay
+    consul:
+      config:
+        enabled: false
 
 management:
   endpoints:
