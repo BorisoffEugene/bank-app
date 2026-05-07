@@ -40,7 +40,7 @@ public class AccountController {
     }
 
     @PostMapping("/change")
-    //@PreAuthorize("hasRole('SERVICE') && hasAuthority('accounts.write')") todo
+    @PreAuthorize("hasRole('SERVICE') && hasAuthority('accounts.write')")
     public void changeSum(@RequestBody @Valid CashRequestDto dto) {
         accountService.changeSum(dto);
     }

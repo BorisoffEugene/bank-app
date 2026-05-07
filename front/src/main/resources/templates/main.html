@@ -48,12 +48,8 @@
                                 </p>
                             </div>
                             <div class="form-group">
-                                <h6>
-                                    <label for="sum">Сумма на счету, руб</label>
-                                </h6>
-                                <p>
-                                    <input type="integer" class="form-control" name="sum" id="sum" th:value="${sum}" readonly>
-                                </p>
+                                <h6>Сумма на счету, руб</h6>
+                                <p th:text="${sum}" />
                             </div>
                             <button type="submit" class="btn btn-secondary">Сохранить изменения</button>
                         </form>

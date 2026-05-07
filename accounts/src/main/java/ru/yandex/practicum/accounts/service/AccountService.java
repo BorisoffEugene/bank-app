@@ -45,6 +45,7 @@ public class AccountService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public void changeSum(CashRequestDto dto) {
         AccountResponseDto response = findByLogin(dto.getAccount());
 
@@ -53,8 +54,7 @@ public class AccountService {
             throw new IllegalArgumentException("Недостаточно средств на счету");
 
         sum += dto.getAmount() * (dto.getAction().equals("GET") ? -1 : 1);
-
-        save(new AccountRequestDto(response.getLogin(), response.getName(), response.getBirthdate(), sum));
+        repository.updateSum(sum, response.getLogin());
     }
 
     @Transactional
@@ -63,10 +63,10 @@ public class AccountService {
         AccountResponseDto accountFrom = findByLogin(dto.getAccountFrom());
         if (accountFrom.getSum() < dto.getAmount())
             throw new IllegalArgumentException("Недостаточно средств на счету");
-        save(new AccountRequestDto(accountFrom.getLogin(), accountFrom.getName(), accountFrom.getBirthdate(), accountFrom.getSum() - dto.getAmount()));
+        repository.updateSum(accountFrom.getSum() - dto.getAmount(), accountFrom.getLogin());
 
         // положить денег получателю
         AccountResponseDto accountTo = findByLogin(dto.getAccountTo());
-        save(new AccountRequestDto(accountTo.getLogin(), accountTo.getName(), accountTo.getBirthdate(), accountTo.getSum() + dto.getAmount()));
+        repository.updateSum(accountTo.getSum() + dto.getAmount(), accountTo.getLogin());
     }
 }

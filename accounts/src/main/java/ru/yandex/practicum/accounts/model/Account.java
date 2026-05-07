@@ -21,6 +21,6 @@ public class Account {
     @Column(nullable = false)
     private LocalDate birthdate;
 
-    @Column(nullable = false, columnDefinition = "int default 0")
+    @Column(nullable = false, insertable = false, updatable = false, columnDefinition = "int default 0")
     private int sum;
 }

@@ -2,6 +2,23 @@
 
 Микросервисное приложение Банк
 
+## Описание
+Этот проект демонстрирует умение работать с
+* Spring Boot Framework, Spring Boot Test, Spring WebFlux, Spring Data JPA, Spring Cloud, Spring Security, Lombok 
+* микросервисами
+* паттернами Single Service per Host, Database per Service, Gateway, Service Discovery, Circuit Breake, Load Balancing, External Configuration
+* базами данных, в том числе встроенными (H2)
+* модульным и интеграционным тестированием средствами Spring Boot Test + WebTestClient + JUnit5 + мокирование
+* Maven, Git, Thymeleaf, Docker, Keycloak, Consul
+
+## Требования
+* Java JDK 21
+* Maven
+* PostgreSQL 17
+* Docker
+* Keycloack
+* Hashicorp Consul
+
 ## Названия и адреса модулей и сопровождающих сервисов
 * Сервер авторизации OAuth 2.0: Keycloak (http://localhost:8080) 
 * База данных: postgresql 17 (jdbc:postgresql://localhost:5432/postgres)
@@ -13,4 +30,27 @@
 * Уведомления: bank-notifications (http://localhost:8085)
 * Gateway API: bank-gateway (http://localhost:8086)
 
+## Установка и запуск
+1. **Клонируйте репозиторий:**
+    ```bash
+    git clone https://github.com/BorisoffEugene/bank-app
+    ```
+2. **Перейдите в папку проекта:**
+    ```bash
+    cd bank-app
+    ```
+3. **Соберите проект с помощью Maven:**
+    ```bash
+    mvn clean package
+    ```
+4. **Запустите тесты с помощью Maven:**
+   ```bash
+   mvn test
+   ```
+5. **Запуск микросервисов + Keycloak + postgres + consul:**
+    ```bash
+    docker-compose up --build
+    ```
 
+## Автор
+**Борисов Евгений**

@@ -79,12 +79,12 @@ public class MainController {
     }
 
     @PostMapping("/account")
-    public String editAccount(Model model, @RequestParam String name, @RequestParam LocalDate birthdate, @RequestParam int sum) {
+    public String editAccount(Model model, @RequestParam String name, @RequestParam LocalDate birthdate) {
         String errors = null;
         String info = "Данные сохранены";
 
         try {
-            accountClient.save(new AccountRequestDto(name, birthdate, sum));
+            accountClient.save(new AccountRequestDto(name, birthdate));
         } catch (Exception e) {
             errors = e.getMessage();
             info = null;
