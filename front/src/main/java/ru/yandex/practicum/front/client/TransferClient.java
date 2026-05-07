@@ -12,17 +12,15 @@ import ru.yandex.practicum.front.controller.dto.TransferResponseDto;
 @Component
 public class TransferClient {
     private final WebClient gatewayWebClient;
-    private final String gatewayBaseUrl;
 
-    public TransferClient(WebClient gatewayWebClient, @Value("${bank.gateway.base-url}") String gatewayBaseUrl) {
+    public TransferClient(WebClient gatewayWebClient) {
         this.gatewayWebClient = gatewayWebClient;
-        this.gatewayBaseUrl = gatewayBaseUrl;
     }
 
     public TransferResponseDto save(TransferRequestDto request) {
         return gatewayWebClient
                 .post()
-                .uri(gatewayBaseUrl + "/transfer")
+                .uri("http://gateway-service/transfer")
                 .bodyValue(request)
                 .retrieve()
                 .onStatus(HttpStatusCode::isError,

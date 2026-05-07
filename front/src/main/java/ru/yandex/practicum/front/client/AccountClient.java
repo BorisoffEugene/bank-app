@@ -1,6 +1,5 @@
 package ru.yandex.practicum.front.client;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -14,17 +13,15 @@ import java.util.List;
 @Component
 public class AccountClient {
     private final WebClient gatewayWebClient;
-    private final String gatewayBaseUrl;
 
-    public AccountClient(WebClient gatewayWebClient, @Value("${bank.gateway.base-url}") String gatewayBaseUrl) {
+    public AccountClient(WebClient gatewayWebClient) {
         this.gatewayWebClient = gatewayWebClient;
-        this.gatewayBaseUrl = gatewayBaseUrl;
     }
 
     public AccountResponseDto findByLogin() {
         return gatewayWebClient
                 .get()
-                .uri(gatewayBaseUrl + "/account")
+                .uri("http://gateway-service/account")
                 .retrieve()
                 .onStatus(HttpStatusCode::isError,
                         clientResponse -> clientResponse.bodyToMono(ErrorResponse.class)
@@ -37,7 +34,7 @@ public class AccountClient {
     public AccountResponseDto save(AccountRequestDto request) {
         return gatewayWebClient
                 .post()
-                .uri(gatewayBaseUrl + "/account")
+                .uri("http://gateway-service/account")
                 .bodyValue(request)
                 .retrieve()
                 .onStatus(HttpStatusCode::isError,
@@ -51,7 +48,7 @@ public class AccountClient {
     public List<AccountResponseDto> findOtherAccounts() {
         return gatewayWebClient
                 .get()
-                .uri(gatewayBaseUrl + "/account/other-accounts")
+                .uri("http://gateway-service/account/other-accounts")
                 .retrieve()
                 .onStatus(HttpStatusCode::isError,
                         clientResponse -> clientResponse.bodyToMono(ErrorResponse.class)

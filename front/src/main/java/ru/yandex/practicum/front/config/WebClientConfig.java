@@ -1,5 +1,6 @@
 package ru.yandex.practicum.front.config;
 
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.Authentication;
@@ -22,8 +23,14 @@ public class WebClientConfig {
     }
 
     @Bean
-    public WebClient gatewayWebClient() {
-        return WebClient.builder()
+    @LoadBalanced
+    public WebClient.Builder webClientBuilder() {
+        return WebClient.builder();
+    }
+
+    @Bean
+    public WebClient gatewayWebClient(WebClient.Builder webClientBuilder) {
+        return webClientBuilder
                 .filter(addAccessTokenHeader())
                 .build();
     }
