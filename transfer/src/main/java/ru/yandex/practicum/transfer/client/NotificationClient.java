@@ -8,17 +8,15 @@ import ru.yandex.practicum.transfer.dto.NotificationDto;
 @Component
 public class NotificationClient {
     private final WebClient notificationWebClient;
-    private String notificationBaseUrl;
 
-    public NotificationClient(WebClient notificationWebClient, @Value("${bank.notifications.base-url}") String notificationBaseUrl) {
+    public NotificationClient(WebClient notificationWebClient) {
         this.notificationWebClient = notificationWebClient;
-        this.notificationBaseUrl = notificationBaseUrl;
     }
 
     public void send(NotificationDto request) {
         notificationWebClient
                 .post()
-                .uri(notificationBaseUrl + "/notification")
+                .uri("http://notification-service/notification")
                 .bodyValue(request)
                 .retrieve()
                 .bodyToMono(Void.class)

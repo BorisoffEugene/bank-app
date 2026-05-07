@@ -1,5 +1,6 @@
 package ru.yandex.practicum.transfer.config;
 
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.oauth2.client.*;
@@ -32,12 +33,18 @@ public class WebClientConfig {
     }
 
     @Bean
-    public WebClient transferWebClient(OAuth2AuthorizedClientManager authorizedClientManager) {
+    @LoadBalanced
+    public WebClient.Builder webClientBuilder() {
+        return WebClient.builder();
+    }
+
+    @Bean
+    public WebClient transferWebClient(WebClient.Builder webClientBuilder, OAuth2AuthorizedClientManager authorizedClientManager) {
         ServletOAuth2AuthorizedClientExchangeFilterFunction oauth2 = new ServletOAuth2AuthorizedClientExchangeFilterFunction(authorizedClientManager);
 
         oauth2.setDefaultClientRegistrationId("bank-transfer");
 
-        return WebClient.builder()
+        return webClientBuilder
                 .apply(oauth2.oauth2Configuration())
                 .build();
     }

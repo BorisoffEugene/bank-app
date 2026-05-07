@@ -1,6 +1,5 @@
 package ru.yandex.practicum.transfer.client;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -11,17 +10,15 @@ import ru.yandex.practicum.transfer.dto.TransferRequestDto;
 @Component
 public class AccountClient {
     private final WebClient accountWebClient;
-    private String accountBaseUrl;
 
-    public AccountClient(WebClient accountWebClient, @Value("${bank.accounts.base-url}") String accountBaseUrl) {
+    public AccountClient(WebClient accountWebClient) {
         this.accountWebClient = accountWebClient;
-        this.accountBaseUrl = accountBaseUrl;
     }
 
     public void transfer(TransferRequestDto request) {
         accountWebClient
                 .post()
-                .uri(accountBaseUrl + "/account/transfer")
+                .uri("http://account-service/account/transfer")
                 .bodyValue(request)
                 .retrieve()
                 .onStatus(HttpStatusCode::isError,

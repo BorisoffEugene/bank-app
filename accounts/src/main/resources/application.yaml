@@ -47,10 +47,6 @@ management:
       exposure:
         include: "*"
 
-bank:
-  notifications:
-    base-url: http://localhost:8085
-
 logging:
   level:
     root: INFO
