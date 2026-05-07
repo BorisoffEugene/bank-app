@@ -114,7 +114,7 @@ public class MainController {
         String info = String.format("Успешно переведено %d руб.", value);
 
         try {
-            transferClient.save(new TransferRequestDto(login, value));
+            transferClient.save(new TransferRequestDto(login, value, "OK"));
         } catch (Exception e) {
             errors = e.getMessage();
             info = null;

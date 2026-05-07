@@ -6,6 +6,7 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -28,7 +29,7 @@ public class Transfer {
     @Column(nullable = false)
     private int amount;
 
-    @Column(nullable = false, insertable = false, columnDefinition = "varchar default 'OK'")
+    @Column(nullable = false, columnDefinition = "varchar default 'OK'")
     private String status;
 
     private String error;

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.accounts.dto.AccountRequestDto;
 import ru.yandex.practicum.accounts.dto.AccountResponseDto;
 import ru.yandex.practicum.accounts.dto.CashRequestDto;
+import ru.yandex.practicum.accounts.dto.TransferRequestDto;
 import ru.yandex.practicum.accounts.service.AccountService;
 
 import java.util.List;
@@ -44,4 +45,9 @@ public class AccountController {
         accountService.changeSum(dto);
     }
 
+    @PostMapping("/transfer")
+    //@PreAuthorize("hasRole('SERVICE') && hasAuthority('accounts.write')") todo
+    public void changeSum(@RequestBody @Valid TransferRequestDto dto) {
+        accountService.transfer(dto);
+    }
 }

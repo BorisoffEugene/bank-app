@@ -1,12 +1,10 @@
 package ru.yandex.practicum.accounts.service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.accounts.client.NotificationClient;
-import ru.yandex.practicum.accounts.dto.AccountRequestDto;
-import ru.yandex.practicum.accounts.dto.AccountResponseDto;
-import ru.yandex.practicum.accounts.dto.CashRequestDto;
-import ru.yandex.practicum.accounts.dto.NotificationDto;
+import ru.yandex.practicum.accounts.dto.*;
 import ru.yandex.practicum.accounts.mapper.AccountMapper;
 import ru.yandex.practicum.accounts.model.Account;
 import ru.yandex.practicum.accounts.repository.AccountRepository;
@@ -57,5 +55,18 @@ public class AccountService {
         sum += dto.getAmount() * (dto.getAction().equals("GET") ? -1 : 1);
 
         save(new AccountRequestDto(response.getLogin(), response.getName(), response.getBirthdate(), sum));
+    }
+
+    @Transactional
+    public void transfer(TransferRequestDto dto) {
+        // снять деньги с отправителя
+        AccountResponseDto accountFrom = findByLogin(dto.getAccountFrom());
+        if (accountFrom.getSum() < dto.getAmount())
+            throw new IllegalArgumentException("Недостаточно средств на счету");
+        save(new AccountRequestDto(accountFrom.getLogin(), accountFrom.getName(), accountFrom.getBirthdate(), accountFrom.getSum() - dto.getAmount()));
+
+        // положить денег получателю
+        AccountResponseDto accountTo = findByLogin(dto.getAccountTo());
+        save(new AccountRequestDto(accountTo.getLogin(), accountTo.getName(), accountTo.getBirthdate(), accountTo.getSum() + dto.getAmount()));
     }
 }

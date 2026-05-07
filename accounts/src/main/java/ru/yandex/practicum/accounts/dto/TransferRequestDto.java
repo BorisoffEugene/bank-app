@@ -1,4 +1,4 @@
-package ru.yandex.practicum.transfer.dto;
+package ru.yandex.practicum.accounts.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
@@ -19,6 +19,4 @@ public class TransferRequestDto {
 
     @Positive(message = "Сумма должна быть больше нуля")
     private int amount;
-
-    private String status;
 }
