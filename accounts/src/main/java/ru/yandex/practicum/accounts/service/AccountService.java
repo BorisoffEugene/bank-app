@@ -22,7 +22,6 @@ public class AccountService {
     public AccountResponseDto save(AccountRequestDto dto) {
         notificationClient.send(new NotificationDto(String.format("Данные клиента по логину '%s' изменены", dto.getLogin())));
 
-
         Account account = mapper.toEntity(dto);
         Account saved = repository.save(account);
         return mapper.toDto(saved);
