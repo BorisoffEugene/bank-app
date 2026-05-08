@@ -90,7 +90,7 @@ public class AccountServiceTest {
 
         // Проверки
         assertEquals(mockResponse.size(), response.size(), String.format("Количество должно быть: %d", mockResponse.size()));
-        assertEquals("petrov", response.getFirst().getLogin(), String.format("Логин должен быть: %s", "petrov"));
+        assertEquals(mockResponse.getFirst().getLogin(), response.getFirst().getLogin(), String.format("Логин должен быть: %s", mockResponse.getFirst().getLogin()));
         assertEquals(mockResponse.getFirst().getName(), response.getFirst().getName(), String.format("Имя должно быть: %s", mockResponse.getFirst().getName()));
         assertEquals(mockResponse.getFirst().getBirthdate(), response.getFirst().getBirthdate(), String.format("Дата рождения должна быть: %tF", mockResponse.getFirst().getBirthdate()));
     }
