@@ -28,7 +28,7 @@ import static org.mockito.Mockito.*;
 public class CashServiceTest {
     private static final String ACCOUNT = "ivanov";
     private static final String ACTION_POST = "POST";
-    private static final String ACTION_GET = "POST";
+    private static final String ACTION_GET = "GET";
     private static final int AMOUNT = 100;
     private static final String STATUS = "OK";
 
