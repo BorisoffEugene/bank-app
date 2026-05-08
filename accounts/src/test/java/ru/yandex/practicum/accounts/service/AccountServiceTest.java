@@ -178,7 +178,4 @@ public class AccountServiceTest {
         assertEquals(NAME, response.getName(), String.format("Имя должно быть: %s", NAME));
         assertEquals(BIRTHDATE, response.getBirthdate(), String.format("Дата рождения должна быть: %tF", BIRTHDATE));
     }
-
-    // todo changeSum
-    // todo transfer
 }
