@@ -14,7 +14,7 @@ spring:
           bank-accounts:
             provider: keycloak
             client-id: bank-accounts
-            client-secret: qAvEGuz3huMYEk0SJluuUm6HriQZYyTX
+            client-secret: 57FGBMmC8F9XZKACObkE9wvSDOIYZEbp
             authorization-grant-type: client_credentials
         provider:
           keycloak:

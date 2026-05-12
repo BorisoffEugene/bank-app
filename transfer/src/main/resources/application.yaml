@@ -14,7 +14,7 @@ spring:
           bank-transfer:
             provider: keycloak
             client-id: bank-transfer
-            client-secret: JnZCXEp1UNHcT3I4TqguwMtfpKt8NB0Q
+            client-secret: ryLNTnYOL7qGJ2OYETBu8phZ8ghWZGSa
             authorization-grant-type: client_credentials
         provider:
           keycloak:

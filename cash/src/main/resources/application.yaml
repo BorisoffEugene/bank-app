@@ -14,7 +14,7 @@ spring:
           bank-cash:
             provider: keycloak
             client-id: bank-cash
-            client-secret: 0YA9hFTiIEmUSWMD4fhHYUnorIGk67BW
+            client-secret: ytLdRnZPLSADrPjK1iXOSchChHzc9nzG
             authorization-grant-type: client_credentials
         provider:
           keycloak:
