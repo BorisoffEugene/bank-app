@@ -15,7 +15,7 @@ public class NotificationClient {
     public void send(NotificationDto request) {
         notificationWebClient
                 .post()
-                .uri("http://notification-service/notification")
+                .uri("http://localhost:8085/notification")
                 .bodyValue(request)
                 .retrieve()
                 .bodyToMono(Void.class)
