@@ -1,4 +1,4 @@
-package ru.yandex.practicum.accounts.client;
+package ru.yandex.practicum.cash.client;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.contract.stubrunner.spring.AutoConfigureStubRunner;
 import org.springframework.cloud.contract.stubrunner.spring.StubRunnerProperties;
-import ru.yandex.practicum.accounts.dto.NotificationDto;
+import ru.yandex.practicum.cash.dto.NotificationDto;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
