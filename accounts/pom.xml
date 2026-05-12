@@ -23,4 +23,18 @@
         </dependency>
     </dependencies>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-contract-maven-plugin</artifactId>
+                <version>4.2.1</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <baseClassForTests>ru.yandex.practicum.accounts.contract.BaseAccountContractTest</baseClassForTests>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>

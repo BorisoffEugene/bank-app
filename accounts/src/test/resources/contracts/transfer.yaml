@@ -1,0 +1,14 @@
+name: transfer
+description: Перевод суммы со счета на счет
+request:
+  method: POST
+  url: /account/transfer
+  body:
+    accountFrom: ivanov
+    accountTo: petrov
+    amount: 100
+    status: OK
+  headers:
+    Content-Type: application/json
+response:
+  status: 200
