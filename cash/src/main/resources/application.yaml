@@ -1,0 +1,57 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: bank-cash
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/realms/bank-realm
+      client:
+        registration:
+          bank-cash:
+            provider: keycloak
+            client-id: bank-cash
+            client-secret: ytLdRnZPLSADrPjK1iXOSchChHzc9nzG
+            authorization-grant-type: client_credentials
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:8080/realms/bank-realm
+  sql:
+    init:
+      mode: always
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: postgres
+    jpa:
+      hibernate:
+        ddl-auto: update
+      show-sql: true
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        service-name: cash-service
+      config:
+        enabled: true
+        prefix: config
+        defaultContext: application
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+logging:
+  level:
+    root: INFO
+    ru.yandex.practicum.cash: DEBUG
+    org.springframework.security: DEBUG
+    org:
+      hibernate:
+        SQL: DEBUG

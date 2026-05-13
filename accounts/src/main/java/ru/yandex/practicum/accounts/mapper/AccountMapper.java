@@ -1,0 +1,12 @@
+package ru.yandex.practicum.accounts.mapper;
+
+import org.mapstruct.Mapper;
+import ru.yandex.practicum.accounts.dto.AccountRequestDto;
+import ru.yandex.practicum.accounts.dto.AccountResponseDto;
+import ru.yandex.practicum.accounts.model.Account;
+
+@Mapper(componentModel = "spring")
+public interface AccountMapper {
+    Account toEntity(AccountRequestDto dto);
+    AccountResponseDto toDto(Account account);
+}

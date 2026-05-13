@@ -1,0 +1,57 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: bank-accounts
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/realms/bank-realm
+      client:
+        registration:
+          bank-accounts:
+            provider: keycloak
+            client-id: bank-accounts
+            client-secret: 57FGBMmC8F9XZKACObkE9wvSDOIYZEbp
+            authorization-grant-type: client_credentials
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:8080/realms/bank-realm
+  sql:
+    init:
+      mode: always
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: postgres
+    jpa:
+      hibernate:
+        ddl-auto: update
+      show-sql: true
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        service-name: account-service
+      config:
+        enabled: true
+        prefix: config
+        defaultContext: application
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+logging:
+  level:
+    root: INFO
+    ru.yandex.practicum.accounts: DEBUG
+    org.springframework.security: DEBUG
+    org:
+      hibernate:
+        SQL: DEBUG

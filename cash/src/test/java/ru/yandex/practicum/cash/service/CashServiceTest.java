@@ -1,0 +1,175 @@
+package ru.yandex.practicum.cash.service;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import ru.yandex.practicum.cash.client.AccountClient;
+import ru.yandex.practicum.cash.client.NotificationClient;
+import ru.yandex.practicum.cash.dto.CashRequestDto;
+import ru.yandex.practicum.cash.dto.CashResponseDto;
+import ru.yandex.practicum.cash.dto.NotificationDto;
+import ru.yandex.practicum.cash.mapper.CashMapper;
+import ru.yandex.practicum.cash.model.Cash;
+import ru.yandex.practicum.cash.repository.CashRepository;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
+@ExtendWith(MockitoExtension.class)
+@DisplayName("Модульное тестирование снятия / пополнения денег")
+@TestMethodOrder(MethodOrderer.DisplayName.class)
+public class CashServiceTest {
+    private static final String ACCOUNT = "ivanov";
+    private static final String ACTION_POST = "POST";
+    private static final String ACTION_GET = "GET";
+    private static final int AMOUNT = 100;
+    private static final String STATUS = "OK";
+
+    @Mock
+    private NotificationClient notificationClient;
+    @Mock
+    private AccountClient accountClient;
+    @Mock
+    private CashRepository repository;
+    @Mock
+    private CashMapper mapper;
+
+    @InjectMocks
+    private CashService cashService;
+
+    @Test
+    @DisplayName("Пополнение")
+    void testSave_POST() {
+        // Подготавливаем тестовые данные
+        CashRequestDto dto = CashRequestDto.builder()
+                .account(ACCOUNT)
+                .action(ACTION_POST)
+                .amount(AMOUNT)
+                .status(STATUS)
+                .build();
+        Cash cash = Cash.builder()
+                .account(ACCOUNT)
+                .action(ACTION_POST)
+                .amount(AMOUNT)
+                .status(STATUS)
+                .build();
+        Cash saved = Cash.builder()
+                .account(ACCOUNT)
+                .action(ACTION_POST)
+                .amount(AMOUNT)
+                .status(STATUS)
+                .build();
+        CashResponseDto mockResponse = CashResponseDto.builder()
+                .account(ACCOUNT)
+                .action(ACTION_POST)
+                .amount(AMOUNT)
+                .status(STATUS)
+                .build();
+
+        // Мок-действия
+        doNothing().when(notificationClient).send(any(NotificationDto.class));
+        doNothing().when(accountClient).changeSum(dto);
+        when(mapper.toEntity(dto)).thenReturn(cash);
+        when(repository.save(cash)).thenReturn(saved);
+        when(mapper.toDto(saved)).thenReturn(mockResponse);
+
+        // Реальное действие
+        CashResponseDto response = cashService.save(dto);
+
+        // Проверки
+        assertEquals(ACCOUNT, response.getAccount(), String.format("Аккаунт должен быть: %s", ACCOUNT));
+        assertEquals(ACTION_POST, response.getAction(), String.format("Действие должно быть: %s", ACTION_POST));
+        assertEquals(AMOUNT, response.getAmount(), String.format("Сумма пополнения должна быть: %d", AMOUNT));
+        assertEquals(STATUS, response.getStatus(), String.format("Статус должен быть: %s", STATUS));
+    }
+
+    @Test
+    @DisplayName("Снятие")
+    void testSave_GET() {
+        // Подготавливаем тестовые данные
+        CashRequestDto dto = CashRequestDto.builder()
+                .account(ACCOUNT)
+                .action(ACTION_GET)
+                .amount(AMOUNT)
+                .status(STATUS)
+                .build();
+        Cash cash = Cash.builder()
+                .account(ACCOUNT)
+                .action(ACTION_GET)
+                .amount(AMOUNT)
+                .status(STATUS)
+                .build();
+        Cash saved = Cash.builder()
+                .account(ACCOUNT)
+                .action(ACTION_GET)
+                .amount(AMOUNT)
+                .status(STATUS)
+                .build();
+        CashResponseDto mockResponse = CashResponseDto.builder()
+                .account(ACCOUNT)
+                .action(ACTION_GET)
+                .amount(AMOUNT)
+                .status(STATUS)
+                .build();
+
+        // Мок-действия
+        doNothing().when(notificationClient).send(any(NotificationDto.class));
+        doNothing().when(accountClient).changeSum(dto);
+        when(mapper.toEntity(dto)).thenReturn(cash);
+        when(repository.save(cash)).thenReturn(saved);
+        when(mapper.toDto(saved)).thenReturn(mockResponse);
+
+        // Реальное действие
+        CashResponseDto response = cashService.save(dto);
+
+        // Проверки
+        assertEquals(ACCOUNT, response.getAccount(), String.format("Аккаунт должен быть: %s", ACCOUNT));
+        assertEquals(ACTION_GET, response.getAction(), String.format("Действие должно быть: %s", ACTION_GET));
+        assertEquals(AMOUNT, response.getAmount(), String.format("Сумма снятия должна быть: %d", AMOUNT));
+        assertEquals(STATUS, response.getStatus(), String.format("Статус должен быть: %s", STATUS));
+    }
+
+    @Test
+    @DisplayName("Снятие (не достаточно средств)")
+    void testSave_GET_ERROR() {
+        // Подготавливаем тестовые данные
+        CashRequestDto dto = CashRequestDto.builder()
+                .account(ACCOUNT)
+                .action(ACTION_GET)
+                .amount(AMOUNT)
+                .status(STATUS)
+                .build();
+        Cash cash = Cash.builder()
+                .account(ACCOUNT)
+                .action(ACTION_GET)
+                .amount(AMOUNT)
+                .status(STATUS)
+                .build();
+        Cash saved = Cash.builder()
+                .account(ACCOUNT)
+                .action(ACTION_GET)
+                .amount(AMOUNT)
+                .status(STATUS)
+                .build();
+
+        // Мок-действия
+        doNothing().when(notificationClient).send(any(NotificationDto.class));
+        doThrow(new IllegalArgumentException("Error")).when(accountClient).changeSum(dto);
+        when(mapper.toEntity(dto)).thenReturn(cash);
+        when(repository.save(cash)).thenReturn(saved);
+
+        // Проверки
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> {CashResponseDto response = cashService.save(dto);},
+                "Должна быть ошибка"
+        );
+    }
+}

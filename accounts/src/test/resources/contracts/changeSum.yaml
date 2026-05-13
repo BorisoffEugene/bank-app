@@ -1,0 +1,14 @@
+name: changeSum
+description: Изменение суммы на счете
+request:
+  method: POST
+  url: /account/change
+  body:
+    account: ivanov
+    action: PUT
+    amount: 100
+    status: OK
+  headers:
+    Content-Type: application/json
+response:
+  status: 200

@@ -1,0 +1,11 @@
+name: sendNotification
+description: Отправка оповещения
+request:
+  method: POST
+  url: /notification
+  body:
+    message: "message"
+  headers:
+    Content-Type: application/json
+response:
+  status: 200
