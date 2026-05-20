@@ -1,0 +1,24 @@
+apiVersion: v2
+name: bank-app-chart
+description: Микросервисное приложение Банк
+version: 1.0.0
+dependencies:
+  - name: accounts
+    version: "1.0.0"
+    repository: "file://../accounts/accounts-chart"
+  - name: cash
+    version: "1.0.0"
+    repository: "file://../cash/cash-chart"
+  - name: front
+    version: "1.0.0"
+    repository: "file://../front/front-chart"
+  - name: gateway
+    version: "1.0.0"
+    repository: "file://../gateway/gateway-chart"
+  - name: notifications
+    version: "1.0.0"
+    repository: "file://../notifications/notifications-chart"
+  - name: transfer
+    version: "1.0.0"
+    repository: "file://../transfer/transfer-chart"
+

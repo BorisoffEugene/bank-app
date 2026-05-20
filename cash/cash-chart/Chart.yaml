@@ -1,0 +1,4 @@
+apiVersion: v2
+name: cash-chart
+description: Снятие/пополнение
+version: 1.0.0

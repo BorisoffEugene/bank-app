@@ -1,0 +1,4 @@
+apiVersion: v2
+name: transfer-chart
+description: Перевод денежных средств
+version: 1.0.0
