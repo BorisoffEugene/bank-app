@@ -1,0 +1,21 @@
+dependencies:
+- name: accounts-chart
+  repository: file://../accounts/accounts-chart
+  version: 1.0.0
+- name: cash-chart
+  repository: file://../cash/cash-chart
+  version: 1.0.0
+- name: front-chart
+  repository: file://../front/front-chart
+  version: 1.0.0
+- name: gateway-chart
+  repository: file://../gateway/gateway-chart
+  version: 1.0.0
+- name: notifications-chart
+  repository: file://../notifications/notifications-chart
+  version: 1.0.0
+- name: transfer-chart
+  repository: file://../transfer/transfer-chart
+  version: 1.0.0
+digest: sha256:bb1df001c6c0f3067fd00373e0a2afed3bb2c70531690c87296cce22d2e0c045
+generated: "2026-05-20T12:52:42.972142+03:00"
