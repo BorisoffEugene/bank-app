@@ -50,9 +50,9 @@
    ```bash
    mvn test
    ```
-5. **Запуск микросервисов + Keycloak + postgres + consul:**
+5. **Развертывание микросервисов в k8s:**
     ```bash
-    docker-compose up --build
+    helm install bank-app ./bank-app-chart
     ```
 
 ## Автор
