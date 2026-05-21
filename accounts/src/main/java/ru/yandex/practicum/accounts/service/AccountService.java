@@ -2,8 +2,8 @@ package ru.yandex.practicum.accounts.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.accounts.client.NotificationClient;
 import ru.yandex.practicum.accounts.dto.*;
 import ru.yandex.practicum.accounts.mapper.AccountMapper;
 import ru.yandex.practicum.accounts.model.Account;
@@ -17,10 +17,10 @@ import java.util.stream.Collectors;
 public class AccountService {
     private final AccountRepository repository;
     private final AccountMapper mapper;
-    private final NotificationClient notificationClient;
+    private final KafkaTemplate<String, NotificationDto> kafkaTemplate;
 
     public AccountResponseDto save(AccountRequestDto dto) {
-        notificationClient.send(new NotificationDto(String.format("Данные клиента по логину '%s' изменены", dto.getLogin())));
+        kafkaTemplate.send("notification", new NotificationDto(String.format("Данные клиента по логину '%s' изменены", dto.getLogin())));
 
         Account account = mapper.toEntity(dto);
         Account saved = repository.save(account);
@@ -28,7 +28,7 @@ public class AccountService {
     }
 
     public AccountResponseDto findByLogin(String login) {
-        notificationClient.send(new NotificationDto(String.format("Запрос данных клиента по логину '%s'", login)));
+        kafkaTemplate.send("notification", new NotificationDto(String.format("Запрос данных клиента по логину '%s'", login)));
 
         return repository.findByLogin(login)
                 .map(mapper::toDto)
@@ -36,7 +36,7 @@ public class AccountService {
     }
 
     public List<AccountResponseDto> findOtherAccounts(String login) {
-        notificationClient.send(new NotificationDto(String.format("Запрос списка клиентов для перевода денег для логина '%s'", login)));
+        kafkaTemplate.send("notification", new NotificationDto(String.format("Запрос списка клиентов для перевода денег для логина '%s'", login)));
 
         return repository.findByLoginNot(login)
                 .stream()

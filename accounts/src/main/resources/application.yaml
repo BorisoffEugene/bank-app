@@ -4,6 +4,11 @@ server:
 spring:
   application:
     name: bank-accounts
+  kafka:
+    bootstrap-servers: kafka-broker-0.kafka-headless.default.svc.cluster.local:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
   security:
     oauth2:
       resourceserver:
@@ -14,7 +19,7 @@ spring:
           bank-accounts:
             provider: keycloak
             client-id: bank-accounts
-            client-secret: 57FGBMmC8F9XZKACObkE9wvSDOIYZEbp
+            client-secret: k3U67RgotCR59FbT7QzBsQY5Re61R4hX
             authorization-grant-type: client_credentials
         provider:
           keycloak:
