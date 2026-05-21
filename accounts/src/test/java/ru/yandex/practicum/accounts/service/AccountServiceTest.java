@@ -8,7 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.yandex.practicum.accounts.client.NotificationClient;
+import org.springframework.kafka.core.KafkaTemplate;
 import ru.yandex.practicum.accounts.dto.AccountRequestDto;
 import ru.yandex.practicum.accounts.dto.AccountResponseDto;
 import ru.yandex.practicum.accounts.dto.NotificationDto;
@@ -19,11 +19,12 @@ import ru.yandex.practicum.accounts.repository.AccountRepository;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -36,7 +37,7 @@ public class AccountServiceTest {
     private static final LocalDate BIRTHDATE = LocalDate.of(2000, 3, 12);
 
     @Mock
-    private NotificationClient notificationClient;
+    private KafkaTemplate<String, NotificationDto> kafkaTemplate;
     @Mock
     private AccountRepository repository;
     @Mock
@@ -53,7 +54,7 @@ public class AccountServiceTest {
         List<Account> mockAccounts = List.of();
 
         // Мок-действия
-        doNothing().when(notificationClient).send(any(NotificationDto.class));
+        when(kafkaTemplate.send(eq("notification"), any(NotificationDto.class))).thenReturn(CompletableFuture.completedFuture(null));
         when(repository.findByLoginNot(LOGIN)).thenReturn(mockAccounts);
         for (int i = 0; i < mockAccounts.size(); i++)
             when(mapper.toDto(mockAccounts.get(i))).thenReturn(mockResponse.get(i));
@@ -80,7 +81,7 @@ public class AccountServiceTest {
 
 
         // Мок-действия
-        doNothing().when(notificationClient).send(any(NotificationDto.class));
+        when(kafkaTemplate.send(eq("notification"), any(NotificationDto.class))).thenReturn(CompletableFuture.completedFuture(null));
         when(repository.findByLoginNot(LOGIN)).thenReturn(mockAccounts);
         for (int i = 0; i < mockAccounts.size(); i++)
             when(mapper.toDto(mockAccounts.get(i))).thenReturn(mockResponse.get(i));
@@ -111,7 +112,7 @@ public class AccountServiceTest {
                 .build();
 
         // Мок-действия
-        doNothing().when(notificationClient).send(any(NotificationDto.class));
+        when(kafkaTemplate.send(eq("notification"), any(NotificationDto.class))).thenReturn(CompletableFuture.completedFuture(null));
         when(repository.findByLogin(LOGIN)).thenReturn(optionalAccount);
         when(mapper.toDto(optionalAccount.get())).thenReturn(mockResponse);
 
@@ -128,7 +129,7 @@ public class AccountServiceTest {
     @DisplayName("Получение данных аккаунта (данных нет)")
     void testFindByLogin_NotFound() {
         // Мок-действия
-        doNothing().when(notificationClient).send(any(NotificationDto.class));
+        when(kafkaTemplate.send(eq("notification"), any(NotificationDto.class))).thenReturn(CompletableFuture.completedFuture(null));
         when(repository.findByLogin(WRONG_LOGIN)).thenReturn(Optional.empty());
 
         // Проверки
@@ -165,7 +166,7 @@ public class AccountServiceTest {
                 .build();
 
         // Мок-действия
-        doNothing().when(notificationClient).send(any(NotificationDto.class));
+        when(kafkaTemplate.send(eq("notification"), any(NotificationDto.class))).thenReturn(CompletableFuture.completedFuture(null));
         when(mapper.toEntity(dto)).thenReturn(account);
         when(repository.save(account)).thenReturn(saved);
         when(mapper.toDto(saved)).thenReturn(mockResponse);

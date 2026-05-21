@@ -8,14 +8,16 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.kafka.core.KafkaTemplate;
 import ru.yandex.practicum.cash.client.AccountClient;
-import ru.yandex.practicum.cash.client.NotificationClient;
 import ru.yandex.practicum.cash.dto.CashRequestDto;
 import ru.yandex.practicum.cash.dto.CashResponseDto;
 import ru.yandex.practicum.cash.dto.NotificationDto;
 import ru.yandex.practicum.cash.mapper.CashMapper;
 import ru.yandex.practicum.cash.model.Cash;
 import ru.yandex.practicum.cash.repository.CashRepository;
+
+import java.util.concurrent.CompletableFuture;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -33,7 +35,7 @@ public class CashServiceTest {
     private static final String STATUS = "OK";
 
     @Mock
-    private NotificationClient notificationClient;
+    private KafkaTemplate<String, NotificationDto> kafkaTemplate;
     @Mock
     private AccountClient accountClient;
     @Mock
@@ -74,7 +76,7 @@ public class CashServiceTest {
                 .build();
 
         // Мок-действия
-        doNothing().when(notificationClient).send(any(NotificationDto.class));
+        when(kafkaTemplate.send(eq("notification"), any(NotificationDto.class))).thenReturn(CompletableFuture.completedFuture(null));
         doNothing().when(accountClient).changeSum(dto);
         when(mapper.toEntity(dto)).thenReturn(cash);
         when(repository.save(cash)).thenReturn(saved);
@@ -120,7 +122,7 @@ public class CashServiceTest {
                 .build();
 
         // Мок-действия
-        doNothing().when(notificationClient).send(any(NotificationDto.class));
+        when(kafkaTemplate.send(eq("notification"), any(NotificationDto.class))).thenReturn(CompletableFuture.completedFuture(null));
         doNothing().when(accountClient).changeSum(dto);
         when(mapper.toEntity(dto)).thenReturn(cash);
         when(repository.save(cash)).thenReturn(saved);
@@ -160,7 +162,7 @@ public class CashServiceTest {
                 .build();
 
         // Мок-действия
-        doNothing().when(notificationClient).send(any(NotificationDto.class));
+        when(kafkaTemplate.send(eq("notification"), any(NotificationDto.class))).thenReturn(CompletableFuture.completedFuture(null));
         doThrow(new IllegalArgumentException("Error")).when(accountClient).changeSum(dto);
         when(mapper.toEntity(dto)).thenReturn(cash);
         when(repository.save(cash)).thenReturn(saved);

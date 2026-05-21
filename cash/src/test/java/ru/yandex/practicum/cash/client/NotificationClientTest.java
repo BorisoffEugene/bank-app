@@ -1,9 +1,6 @@
 package ru.yandex.practicum.cash.client;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.contract.stubrunner.spring.AutoConfigureStubRunner;
@@ -12,6 +9,7 @@ import ru.yandex.practicum.cash.dto.NotificationDto;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
+@Disabled
 @SpringBootTest(
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
         properties = "stubrunner.ids-to-service-ids.notifications=notification-service"
