@@ -1,0 +1,4 @@
+apiVersion: v2
+name: accounts-chart
+description: Аккаунты
+version: 1.0.0

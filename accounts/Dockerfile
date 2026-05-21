@@ -1,7 +1,7 @@
 FROM eclipse-temurin:21-jre-alpine
 
-WORKDIR /bank-app
-COPY accounts/target/*.jar app.jar
+WORKDIR /accounts
+COPY target/*.jar app.jar
 
 EXPOSE 8082
 
