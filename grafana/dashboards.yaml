@@ -1,0 +1,11 @@
+apiVersion: 1
+
+providers:
+  - name: 'Bank-app Dashboards'
+    orgId: 1
+    folder: 'Bank-app'
+    type: file
+    disableDeletion: false
+    editable: true
+    options:
+      path: /grafana

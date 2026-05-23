@@ -1,0 +1,47 @@
+{
+  "annotations": { "list": [] },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "title": "Неуспешные попытки снятия денег (по логинам)",
+      "type": "timeseries",
+      "id": 1,
+      "gridPos": { "h": 8, "w": 8, "x": 0, "y": 0 },
+      "targets": [
+        {
+          "datasource": { "type": "prometheus", "uid": "Prometheus" },
+          "expr": "sum(rate(cash_failed_total[5m])) by (login) * 60",
+          "legendFormat": "Клиент: {{login}}"
+        }
+      ]
+    },
+    {
+      "title": "Неуспешные переводы денег (Отправитель -> Получатель)",
+      "type": "timeseries",
+      "id": 2,
+      "gridPos": { "h": 8, "w": 8, "x": 8, "y": 0 },
+      "targets": [
+        {
+          "datasource": { "type": "prometheus", "uid": "Prometheus" },
+          "expr": "sum(rate(transfer_failed_total[5m])) by (sender, recipient) * 60",
+          "legendFormat": "{{sender}} -> {{recipient}}"
+        }
+      ]
+    }
+  ],
+  "refresh": "5s",
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": ["business"],
+  "time": { "from": "now-1h", "to": "now" },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Бизнес-метрики микросервисов",
+  "uid": "business-metrics-dashboard",
+  "version": 1
+}
