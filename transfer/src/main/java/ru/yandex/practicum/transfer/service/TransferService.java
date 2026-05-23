@@ -1,5 +1,6 @@
 package ru.yandex.practicum.transfer.service;
 
+import io.micrometer.core.instrument.Metrics;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,8 @@ public class TransferService {
             trunsfer.setStatus("ERROR");
             trunsfer.setError(e.getMessage());
             repository.save(trunsfer);
+
+            Metrics.counter("transfer_failed_total", "sender", dto.getAccountFrom(), "recipient", dto.getAccountTo()).increment();
 
             throw new IllegalArgumentException(e.getMessage());
         }

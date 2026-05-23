@@ -1,0 +1,32 @@
+rule_files:
+  - "alerts.yaml"
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+            - "alertmanager:9093"
+
+scrape_configs:
+  - job_name: "metrics"
+    metrics_path: "/actuator/prometheus"
+    scrape_interval: 15s
+    static_configs:
+      - targets: ["localhost:8081"]
+        labels:
+          group: "front"
+      - targets: ["localhost:8082"]
+        labels:
+          group: "accounts"
+      - targets: ["localhost:8083"]
+        labels:
+          group: "cash"
+      - targets: ["localhost:8084"]
+        labels:
+          group: "transfer"
+      - targets: ["localhost:8085"]
+        labels:
+          group: "notifications"
+      - targets: ["localhost:8086"]
+        labels:
+          group: "gateway"

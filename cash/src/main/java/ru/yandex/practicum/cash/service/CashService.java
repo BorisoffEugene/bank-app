@@ -1,5 +1,6 @@
 package ru.yandex.practicum.cash.service;
 
+import io.micrometer.core.instrument.Metrics;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,8 @@ public class CashService {
             cash.setStatus("ERROR");
             cash.setError(e.getMessage());
             repository.save(cash);
+
+            Metrics.counter("cash_failed_total", "login", dto.getAccount()).increment();
 
             throw new IllegalArgumentException(e.getMessage());
         }
