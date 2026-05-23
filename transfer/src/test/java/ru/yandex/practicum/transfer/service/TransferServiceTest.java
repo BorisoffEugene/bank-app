@@ -8,6 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.kafka.core.KafkaTemplate;
 import ru.yandex.practicum.transfer.client.AccountClient;
 import ru.yandex.practicum.transfer.client.NotificationClient;
 import ru.yandex.practicum.transfer.dto.NotificationDto;
@@ -16,6 +17,8 @@ import ru.yandex.practicum.transfer.dto.TransferResponseDto;
 import ru.yandex.practicum.transfer.mapper.TransferMapper;
 import ru.yandex.practicum.transfer.model.Transfer;
 import ru.yandex.practicum.transfer.repository.TransferRepository;
+
+import java.util.concurrent.CompletableFuture;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -32,7 +35,7 @@ public class TransferServiceTest {
     private static final String STATUS = "OK";
 
     @Mock
-    private NotificationClient notificationClient;
+    private KafkaTemplate<String, NotificationDto> kafkaTemplate;
     @Mock
     private AccountClient accountClient;
     @Mock
@@ -73,7 +76,7 @@ public class TransferServiceTest {
                 .build();
 
         // Мок-действия
-        doNothing().when(notificationClient).send(any(NotificationDto.class));
+        when(kafkaTemplate.send(eq("notification"), any(NotificationDto.class))).thenReturn(CompletableFuture.completedFuture(null));
         doNothing().when(accountClient).transfer(dto);
         when(mapper.toEntity(dto)).thenReturn(transfer);
         when(repository.save(transfer)).thenReturn(saved);
@@ -113,7 +116,7 @@ public class TransferServiceTest {
                 .build();
 
         // Мок-действия
-        doNothing().when(notificationClient).send(any(NotificationDto.class));
+        when(kafkaTemplate.send(eq("notification"), any(NotificationDto.class))).thenReturn(CompletableFuture.completedFuture(null));
         doThrow(new IllegalArgumentException("Error")).when(accountClient).transfer(dto);
         when(mapper.toEntity(dto)).thenReturn(transfer);
         when(repository.save(transfer)).thenReturn(saved);

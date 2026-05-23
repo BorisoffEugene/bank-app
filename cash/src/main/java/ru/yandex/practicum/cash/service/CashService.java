@@ -1,11 +1,9 @@
 package ru.yandex.practicum.cash.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 import ru.yandex.practicum.cash.client.AccountClient;
-import ru.yandex.practicum.cash.client.NotificationClient;
 import ru.yandex.practicum.cash.dto.CashRequestDto;
 import ru.yandex.practicum.cash.dto.CashResponseDto;
 import ru.yandex.practicum.cash.dto.NotificationDto;
@@ -18,11 +16,11 @@ import ru.yandex.practicum.cash.repository.CashRepository;
 public class CashService {
     private final CashRepository repository;
     private final CashMapper mapper;
-    private final NotificationClient notificationClient;
     private final AccountClient accountClient;
+    private final KafkaTemplate<String, NotificationDto> kafkaTemplate;
 
     public CashResponseDto save(CashRequestDto dto) {
-        notificationClient.send(new NotificationDto(String.format(
+        kafkaTemplate.send("notification", new NotificationDto(String.format(
                 "Транзакция %s %s суммы %d руб.",
                 dto.getAction().equals("GET") ? "снятия со счета" : "пополнения на счет",
                 dto.getAccount(),
