@@ -1,5 +1,8 @@
 package ru.yandex.practicum.front.controller;
 
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -70,6 +73,8 @@ public class MainController {
 
     @GetMapping
     public String index() {
+        Logger log = LoggerFactory.getLogger(MainController.class);
+        log.info("Главная страница");
         return "redirect:/account";
     }
 

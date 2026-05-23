@@ -40,5 +40,7 @@ management:
         inline-parameters: true
 
 logging:
+  file:
+    name: logs/bank.log
   level:
     root: INFO
