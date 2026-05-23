@@ -2,7 +2,8 @@
 
 Микросервисное приложение Банк.
 Добавляем развертывание приложения с помощью k8s и helm.
-Добавляем Kafka, как брокер сообщений между сервисами и сервисом оповещений
+Добавляем Kafka, как брокер сообщений между сервисами и сервисом оповещений.
+Добавляем Zipkin, Prometheus, Grafana, ELK
 
 ## Описание
 Этот проект демонстрирует умение работать с
@@ -14,6 +15,7 @@
 * Maven, Git, Thymeleaf, Docker, Keycloak, Consul
 * k8s, helm
 * Kafka
+* Zipkin, Prometheus, Grafana, ELK
 
 ## Требования
 * Java JDK 21
@@ -24,6 +26,10 @@
 * k8s
 * Helm
 * Kafka
+* Zipkin
+* Prometheus
+* Grafana
+* ELK
 
 ## Названия и адреса модулей и сопровождающих сервисов
 * Сервер авторизации OAuth 2.0: Keycloak (http://localhost:8080) 
