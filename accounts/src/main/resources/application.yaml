@@ -9,6 +9,8 @@ spring:
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    template:
+      observation-enabled: true
   security:
     oauth2:
       resourceserver:
@@ -51,6 +53,16 @@ management:
     web:
       exposure:
         include: "*"
+  zipkin:
+    tracing:
+      endpoint:  http://127.0.0.1:9411/api/v2/spans
+  tracing:
+    sampling:
+      probability: 1
+  observations:
+    key-values:
+      rdbms:
+        inline-parameters: true
 
 logging:
   level:
