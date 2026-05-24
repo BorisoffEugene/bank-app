@@ -1,7 +1,9 @@
 package ru.yandex.practicum.accounts.service;
 
+import io.micrometer.tracing.Tracer;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.accounts.dto.*;
@@ -13,14 +15,32 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class AccountService {
     private final AccountRepository repository;
     private final AccountMapper mapper;
     private final KafkaTemplate<String, NotificationDto> kafkaTemplate;
+    private final Tracer tracer;
+
+    private String getTraceId() {
+        if (tracer.currentTraceContext().context() != null) {
+            return tracer.currentTraceContext().context().traceId();
+        }
+        return "";
+    }
+
+    private String getSpanId() {
+        if (tracer.currentTraceContext().context() != null) {
+            return tracer.currentTraceContext().context().spanId();
+        }
+        return "";
+    }
 
     public AccountResponseDto save(AccountRequestDto dto) {
-        kafkaTemplate.send("notification", new NotificationDto(String.format("Данные клиента по логину '%s' изменены", dto.getLogin())));
+        String message = String.format("Данные клиента по логину '%s' изменены", dto.getLogin());
+        kafkaTemplate.send("notification", new NotificationDto(message));
+        log.info("{}, {}, {}", message, getTraceId(), getSpanId());
 
         Account account = mapper.toEntity(dto);
         Account saved = repository.save(account);
@@ -28,7 +48,9 @@ public class AccountService {
     }
 
     public AccountResponseDto findByLogin(String login) {
-        kafkaTemplate.send("notification", new NotificationDto(String.format("Запрос данных клиента по логину '%s'", login)));
+        String message = String.format("Запрос данных клиента по логину '%s'", login);
+        kafkaTemplate.send("notification", new NotificationDto(message));
+        log.info("{}, {}, {}", message, getTraceId(), getSpanId());
 
         return repository.findByLogin(login)
                 .map(mapper::toDto)
@@ -36,7 +58,9 @@ public class AccountService {
     }
 
     public List<AccountResponseDto> findOtherAccounts(String login) {
-        kafkaTemplate.send("notification", new NotificationDto(String.format("Запрос списка клиентов для перевода денег для логина '%s'", login)));
+        String message = String.format("Запрос списка клиентов для перевода денег для логина '%s'", login);
+        kafkaTemplate.send("notification", new NotificationDto(message));
+        log.info("{}, {}, {}", message, getTraceId(), getSpanId());
 
         return repository.findByLoginNot(login)
                 .stream()

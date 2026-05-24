@@ -63,9 +63,10 @@ management:
         inline-parameters: true
 
 logging:
+  file:
+    name: logs/bank.log
   level:
     root: INFO
-    ru.yandex.practicum.gateway: DEBUG
-    org.springframework.cloud.gateway: TRACE
-    org.springframework.security: DEBUG
-    reactor.netty.http.client: DEBUG
+  pattern:
+    file: "%d{HH:mm:ss.SSS} %-5level: %msg%n"
+    console: "%d{HH:mm:ss.SSS} %-5level: %msg%n"

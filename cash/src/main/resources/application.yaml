@@ -65,10 +65,10 @@ management:
         inline-parameters: true
 
 logging:
+  file:
+    name: logs/bank.log
   level:
     root: INFO
-    ru.yandex.practicum.cash: DEBUG
-    org.springframework.security: DEBUG
-    org:
-      hibernate:
-        SQL: DEBUG
+  pattern:
+    file: "%d{HH:mm:ss.SSS} %-5level: %msg%n"
+    console: "%d{HH:mm:ss.SSS} %-5level: %msg%n"
