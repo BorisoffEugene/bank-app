@@ -72,7 +72,7 @@ public class MainController {
 
     @GetMapping
     public String index() {
-        log.info("Главная страница");
+        log.info("{}, {}, {}", "Главная страница", "traceId", "spanId"); // todo
         return "redirect:/account";
     }
 
