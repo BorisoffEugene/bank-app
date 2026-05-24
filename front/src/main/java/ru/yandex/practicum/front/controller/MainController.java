@@ -1,5 +1,6 @@
 package ru.yandex.practicum.front.controller;
 
+import io.micrometer.tracing.Tracer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,11 +23,27 @@ public class MainController {
     private final AccountClient accountClient;
     private final CashClient cashClient;
     private final TransferClient transferClient;
+    private final Tracer tracer;
 
-    public MainController(AccountClient accountClient, CashClient cashClient, TransferClient transferClient) {
+    public MainController(AccountClient accountClient, CashClient cashClient, TransferClient transferClient, Tracer tracer) {
         this.accountClient = accountClient;
         this.cashClient = cashClient;
         this.transferClient = transferClient;
+        this.tracer = tracer;
+    }
+
+    private String getTraceId() {
+        if (tracer.currentTraceContext().context() != null) {
+            return tracer.currentTraceContext().context().traceId();
+        }
+        return "";
+    }
+
+    private String getSpanId() {
+        if (tracer.currentTraceContext().context() != null) {
+            return tracer.currentTraceContext().context().spanId();
+        }
+        return "";
     }
 
     private String showMain(Model model, AccountResponseDto response, String errors, String info) {
@@ -72,12 +89,13 @@ public class MainController {
 
     @GetMapping
     public String index() {
-        log.info("{}, {}, {}", "Главная страница", "traceId", "spanId"); // todo
+        //log.info("{}, {}, {}", "Главная страница", getTraceId(), getSpanId());
         return "redirect:/account";
     }
 
     @GetMapping("/account")
     public String getAccount(Model model) {
+        log.info("{}, {}, {}", "Получение данных клиента", getTraceId(), getSpanId());
         return showMain(model);
     }
 
@@ -88,9 +106,11 @@ public class MainController {
 
         try {
             accountClient.save(new AccountRequestDto(name, birthdate));
+            log.info("{}, {}, {}", info, getTraceId(), getSpanId());
         } catch (Exception e) {
             errors = e.getMessage();
             info = null;
+            log.error("{}, {}, {}", errors, getTraceId(), getSpanId());
         }
 
         return showMain(model, errors, info);
@@ -103,9 +123,11 @@ public class MainController {
 
         try {
             cashClient.save(new CashRequestDto(action.name(), value, "OK"));
+            log.info("{}, {}, {}", info, getTraceId(), getSpanId());
         } catch (Exception e) {
             errors = e.getMessage();
             info = null;
+            log.error("{}, {}, {}", errors, getTraceId(), getSpanId());
         }
 
         return showMain(model, errors, info);
@@ -118,9 +140,11 @@ public class MainController {
 
         try {
             transferClient.save(new TransferRequestDto(login, value, "OK"));
+            log.info("{}, {}, {}", info, getTraceId(), getSpanId());
         } catch (Exception e) {
             errors = e.getMessage();
             info = null;
+            log.error("{}, {}, {}", errors, getTraceId(), getSpanId());
         }
 
         return showMain(model, errors, info);
