@@ -1,0 +1,20 @@
+groups:
+  - name: business_metrics_alerts
+    rules:
+      - alert: HighFailedWithdrawalsPerUser
+        expr: sum(rate(cash_failed_total[5m])) by (login) * 60 > 10
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Подозрительно много отказов в снятии денег"
+          description: "Клиент {{ $labels.username }} получил более 10 отказов в снятии средств за последнюю минуту"
+
+      - alert: CriticalFailedTransfers
+        expr: sum(rate(transfer_failed_total[5m])) * 60 > 50
+        for: 1m
+        labels:
+          severity: page
+        annotations:
+          summary: "Массовый сбой денежных переводов"
+          description: "В системе происходит более 50 неудачных переводов в минуту"

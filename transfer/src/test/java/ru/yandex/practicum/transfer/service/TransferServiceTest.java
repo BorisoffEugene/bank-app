@@ -1,12 +1,13 @@
 package ru.yandex.practicum.transfer.service;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import io.micrometer.tracing.CurrentTraceContext;
+import io.micrometer.tracing.TraceContext;
+import io.micrometer.tracing.Tracer;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.kafka.core.KafkaTemplate;
 import ru.yandex.practicum.transfer.client.AccountClient;
@@ -42,9 +43,23 @@ public class TransferServiceTest {
     private TransferRepository repository;
     @Mock
     private TransferMapper mapper;
+    @Mock
+    private Tracer tracer;
 
     @InjectMocks
     private TransferService transferService;
+
+    @BeforeEach
+    void setUpTracer() {
+        CurrentTraceContext currentTraceContext = Mockito.mock(CurrentTraceContext.class);
+        TraceContext traceContext = Mockito.mock(TraceContext.class);
+
+        when(tracer.currentTraceContext()).thenReturn(currentTraceContext);
+        when(currentTraceContext.context()).thenReturn(traceContext);
+
+        when(traceContext.traceId()).thenReturn("mock-trace-id");
+        when(traceContext.spanId()).thenReturn("mock-span-id");
+    }
 
     @Test
     @DisplayName("Перевод")

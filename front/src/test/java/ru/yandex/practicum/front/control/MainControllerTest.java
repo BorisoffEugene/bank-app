@@ -1,6 +1,10 @@
 package ru.yandex.practicum.front.control;
 
+import io.micrometer.tracing.CurrentTraceContext;
+import io.micrometer.tracing.TraceContext;
+import io.micrometer.tracing.Tracer;
 import org.junit.jupiter.api.*;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -43,9 +47,23 @@ public class MainControllerTest {
     private CashClient cashClient;
     @MockitoBean
     private TransferClient transferClient;
+    @MockitoBean
+    private Tracer tracer;
 
     @Autowired
     private MockMvc mockMvc;
+
+    @BeforeEach
+    void setUpTracer() {
+        CurrentTraceContext currentTraceContext = Mockito.mock(CurrentTraceContext.class);
+        TraceContext traceContext = Mockito.mock(TraceContext.class);
+
+        when(tracer.currentTraceContext()).thenReturn(currentTraceContext);
+        when(currentTraceContext.context()).thenReturn(traceContext);
+
+        when(traceContext.traceId()).thenReturn("mock-trace-id");
+        when(traceContext.spanId()).thenReturn("mock-span-id");
+    }
 
     @Test
     @WithMockUser(username = LOGIN)

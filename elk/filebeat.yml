@@ -1,0 +1,8 @@
+filebeat.inputs:
+  - type: filestream
+    enabled: true
+    paths:
+      - ./logs/bank.log
+
+output.logstash:
+  hosts: ["localhost:5044"]
